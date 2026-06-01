@@ -48,7 +48,6 @@
       font-size: 0.8rem; color: #5a607a; text-align: center;
     }
 
-    /* Layout: Grid + Sidebar */
     .main-layout {
       max-width: 1200px;
       margin: 0 auto;
@@ -124,7 +123,21 @@
     button.plus-btn:active { transform: scale(0.96); }
     button.plus-btn:disabled { background: #252840; color: #444a66; cursor: not-allowed; }
 
-    /* Sidebar Auswertung */
+    button.plus5-btn {
+      background: transparent;
+      color: var(--accent, #4f8ef7);
+      border: 2px solid var(--accent, #4f8ef7);
+      border-radius: 8px;
+      padding: 0.45rem 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      flex-shrink: 0;
+    }
+    button.plus5-btn:hover { background: var(--accent, #4f8ef7); color: #fff; }
+    button.plus5-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
     .sidebar {
       background: #1c1f2e;
       border-radius: 14px;
@@ -210,8 +223,8 @@
 
 <script>
   // ── Konfiguration ──────────────────────────────────────────────
-  const SUPABASE_URL = "https://wvfooydrjkcoamohylch.supabase.co";  // ← deine Project URL
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";              // ← dein anon public key
+  const SUPABASE_URL = "https://xxxxx.supabase.co";  // ← deine Project URL
+  const SUPABASE_KEY = "eyJhbGciOi...";              // ← dein anon public key
   const TABLE        = "counter_events";
 
   const STAGES = [
@@ -225,6 +238,8 @@
     { key: "erstgespraech",     label: "Erst­gespräch",      accent: "#27ae60" },
   ];
 
+  const STAGES_WITH_PLUS5 = ["kontaktanfrage", "vernetzt", "dm1", "pitch"];
+
   // ── Supabase ────────────────────────────────────────────────────
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -235,18 +250,22 @@
 
   // ── UI: Cards ───────────────────────────────────────────────────
   function renderCards() {
-    document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => `
-      <div class="card" id="card-${s.key}" style="--accent: ${s.accent}">
-        <span class="stage-num">Stage ${i + 1}</span>
-        <h2>${s.label}</h2>
-        <div class="count" id="count-${s.key}">0</div>
-        <div class="last-click" id="last-${s.key}"></div>
-        <div class="btn-row">
-          <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}', -1)">−1</button>
-          <button class="plus-btn"  id="btn-${s.key}"   onclick="handleClick('${s.key}',  1)">+1</button>
+    document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => {
+      const hasPlus5 = STAGES_WITH_PLUS5.includes(s.key);
+      return `
+        <div class="card" id="card-${s.key}" style="--accent: ${s.accent}">
+          <span class="stage-num">Stage ${i + 1}</span>
+          <h2>${s.label}</h2>
+          <div class="count" id="count-${s.key}">0</div>
+          <div class="last-click" id="last-${s.key}"></div>
+          <div class="btn-row">
+            <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}', -1)">−1</button>
+            <button class="plus-btn"  id="btn-${s.key}"   onclick="handleClick('${s.key}',  1)">+1</button>
+            ${hasPlus5 ? `<button class="plus5-btn" id="btn5-${s.key}" onclick="handleClick('${s.key}', 5)">+5</button>` : ""}
+          </div>
         </div>
-      </div>
-    `).join("");
+      `;
+    }).join("");
   }
 
   function updateUI(key) {
@@ -287,12 +306,12 @@
     `).join("");
 
     const convData = [
-      ["Anfrage → Vernetzt",        c("kontaktanfrage"), c("vernetzt")],
-      ["Vernetzt → DM 1",           c("vernetzt"),       c("dm1")],
-      ["DM 1 → Pitch",              c("dm1"),            c("pitch")],
-      ["Pitch → Pos. Antwort",      c("pitch"),          c("positive_antwort")],
-      ["Pos. Antwort → Gespräch",   c("positive_antwort"), c("erstgespraech")],
-      ["Gesamt (Anfrage → Gespräch)", c("kontaktanfrage"), c("erstgespraech")],
+      ["Anfrage → Vernetzt",          c("kontaktanfrage"),   c("vernetzt")],
+      ["Vernetzt → DM 1",             c("vernetzt"),         c("dm1")],
+      ["DM 1 → Pitch",                c("dm1"),              c("pitch")],
+      ["Pitch → Pos. Antwort",        c("pitch"),            c("positive_antwort")],
+      ["Pos. Antwort → Gespräch",     c("positive_antwort"), c("erstgespraech")],
+      ["Gesamt (Anfrage → Gespräch)", c("kontaktanfrage"),   c("erstgespraech")],
     ];
 
     document.getElementById("stats-conv").innerHTML = convData.map(([label, a, b]) => `
@@ -322,13 +341,14 @@
 
   // ── Klick → Supabase Insert ─────────────────────────────────────
   async function handleClick(stageKey, delta) {
-    // Verhindere negativen Zähler
     if (delta < 0 && state[stageKey].count <= 0) return;
 
     const plusBtn  = document.getElementById(`btn-${stageKey}`);
     const minusBtn = document.getElementById(`minus-${stageKey}`);
+    const plus5Btn = document.getElementById(`btn5-${stageKey}`);
     if (plusBtn)  plusBtn.disabled  = true;
     if (minusBtn) minusBtn.disabled = true;
+    if (plus5Btn) plus5Btn.disabled = true;
 
     const { error } = await db.from(TABLE).insert({
       stage:  stageKey,
@@ -341,8 +361,8 @@
       setStatus("🔴 Speichern fehlgeschlagen");
       if (plusBtn)  plusBtn.disabled  = false;
       if (minusBtn) minusBtn.disabled = false;
+      if (plus5Btn) plus5Btn.disabled = false;
     }
-    // UI kommt über Realtime ↓
   }
 
   // ── Realtime-Sync ────────────────────────────────────────────────
@@ -355,15 +375,16 @@
           if (state[r.stage] !== undefined) {
             state[r.stage].count     += (r.delta || 1);
             state[r.stage].lastClick  = r.created_at;
-            // Nicht unter 0 fallen
             if (state[r.stage].count < 0) state[r.stage].count = 0;
             updateUI(r.stage);
             if (r.delta > 0) pulseCard(r.stage);
             setStatus("🟢 Synchronisiert");
             const plusBtn  = document.getElementById(`btn-${r.stage}`);
             const minusBtn = document.getElementById(`minus-${r.stage}`);
+            const plus5Btn = document.getElementById(`btn5-${r.stage}`);
             if (plusBtn)  plusBtn.disabled  = false;
             if (minusBtn) minusBtn.disabled = false;
+            if (plus5Btn) plus5Btn.disabled = false;
           }
         }
       )
@@ -379,23 +400,20 @@
 
   // ── JSON Export ──────────────────────────────────────────────────
   function exportJSON() {
+    const c = key => state[key]?.count || 0;
     const data = {
       exportedAt: new Date().toISOString(),
       counts: {},
-      conversions: {}
+      conversions: {
+        "anfrage_zu_vernetzt":      conv(c("kontaktanfrage"),   c("vernetzt")),
+        "vernetzt_zu_dm1":          conv(c("vernetzt"),         c("dm1")),
+        "dm1_zu_pitch":             conv(c("dm1"),              c("pitch")),
+        "pitch_zu_positiv":         conv(c("pitch"),            c("positive_antwort")),
+        "positiv_zu_erstgespraech": conv(c("positive_antwort"), c("erstgespraech")),
+        "gesamt":                   conv(c("kontaktanfrage"),   c("erstgespraech")),
+      }
     };
-
-    STAGES.forEach(s => { data.counts[s.key] = state[s.key].count; });
-
-    const c = key => state[key]?.count || 0;
-    data.conversions = {
-      "anfrage_zu_vernetzt":       conv(c("kontaktanfrage"), c("vernetzt")),
-      "vernetzt_zu_dm1":           conv(c("vernetzt"),       c("dm1")),
-      "dm1_zu_pitch":              conv(c("dm1"),            c("pitch")),
-      "pitch_zu_positiv":          conv(c("pitch"),          c("positive_antwort")),
-      "positiv_zu_erstgespraech":  conv(c("positive_antwort"), c("erstgespraech")),
-      "gesamt":                    conv(c("kontaktanfrage"), c("erstgespraech")),
-    };
+    STAGES.forEach(s => { data.counts[s.key] = c(s.key); });
 
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url  = URL.createObjectURL(blob);
