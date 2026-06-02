@@ -7,37 +7,31 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #0f1117;
       min-height: 100vh;
-      padding: 1.5rem 1rem 3rem;
+      padding: 1.5rem 1rem 4rem;
       color: #e8eaf0;
     }
-
     header {
-      max-width: 1200px; margin: 0 auto 1.5rem;
+      max-width: 1300px; margin: 0 auto 1.5rem;
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
     }
     header h1 { font-size: 1.4rem; color: #e8eaf0; }
     .header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
-
     .pill {
       font-size: 0.75rem; color: #9aa0b4;
       background: #1c1f2e; border: 1px solid #2a2f45;
       border-radius: 20px; padding: 0.3rem 0.75rem;
-      cursor: pointer; transition: color 0.15s, border-color 0.15s;
+      cursor: pointer; transition: color 0.15s, border-color 0.15s; border: none;
     }
-    .pill:hover { color: #4f8ef7; border-color: #4f8ef7; }
+    .pill:hover { color: #4f8ef7; }
+    #sync-status { font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e; border-radius: 20px; padding: 0.3rem 0.75rem; }
 
-    #sync-status {
-      font-size: 0.75rem; color: #9aa0b4;
-      background: #1c1f2e; border-radius: 20px; padding: 0.3rem 0.75rem;
-    }
-
+    /* TABS */
     .tabs {
-      max-width: 1200px; margin: 0 auto 1.5rem;
+      max-width: 1300px; margin: 0 auto 2rem;
       display: flex; gap: 0.5rem; border-bottom: 1px solid #252840; padding-bottom: 0.75rem;
     }
     .tab-btn {
@@ -46,19 +40,18 @@
       cursor: pointer; border-radius: 8px; transition: background 0.15s, color 0.15s;
     }
     .tab-btn.active { background: #1c1f2e; color: #e8eaf0; }
-    .tab-btn:hover { color: #9aa0b4; }
-
+    .tab-btn:hover:not(.active) { color: #9aa0b4; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── Counter Tab ── */
-    .main-layout {
-      max-width: 1200px; margin: 0 auto;
+    /* ── COUNTER TAB ── */
+    .counter-layout {
+      max-width: 1300px; margin: 0 auto;
       display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; align-items: start;
     }
-    @media (max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
-
-    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (max-width: 900px) { .counter-layout { grid-template-columns: 1fr; } }
+    .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (max-width: 500px) { .counter-grid { grid-template-columns: 1fr; } }
 
     .card {
       background: #1c1f2e; border-radius: 14px; padding: 1.1rem 0.9rem 1rem;
@@ -71,35 +64,31 @@
       border-radius: 14px 14px 0 0; background: var(--accent, #4f8ef7);
     }
     .stage-num { font-size: 0.62rem; font-weight: 700; color: #444a66; letter-spacing: 0.08em; text-transform: uppercase; }
-    .card h2 { font-size: 0.78rem; color: #9aa0b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.3; }
+    .card h2 { font-size: 0.78rem; color: #9aa0b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
     .count { font-size: 2.6rem; font-weight: 800; color: #e8eaf0; line-height: 1; margin: 0.2rem 0; }
     .last-click { font-size: 0.65rem; color: #444a66; min-height: 0.9em; }
     .btn-row { display: flex; gap: 0.4rem; width: 100%; margin-top: 0.2rem; }
 
-    button.minus-btn {
+    .minus-btn {
       background: #252840; color: #9aa0b4; border: none; border-radius: 8px;
       padding: 0.45rem 0.7rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
       transition: background 0.15s;
     }
-    button.minus-btn:hover { background: #c0392b22; color: #e05555; }
-    button.minus-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    button.plus-btn {
+    .minus-btn:hover { background: #c0392b22; color: #e05555; }
+    .minus-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .plus-btn {
       background: var(--accent, #4f8ef7); color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0; font-size: 1rem; font-weight: 600; cursor: pointer; flex: 1;
       transition: filter 0.15s;
     }
-    button.plus-btn:hover { filter: brightness(1.2); }
-    button.plus-btn:disabled { background: #252840; color: #444a66; cursor: not-allowed; }
-
-    button.plus5-btn {
+    .plus-btn:hover { filter: brightness(1.2); }
+    .plus5-btn {
       background: transparent; color: var(--accent, #4f8ef7);
       border: 2px solid var(--accent, #4f8ef7); border-radius: 8px;
       padding: 0.45rem 0.6rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
       transition: background 0.15s, color 0.15s;
     }
-    button.plus5-btn:hover { background: var(--accent, #4f8ef7); color: #fff; }
-    button.plus5-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .plus5-btn:hover { background: var(--accent, #4f8ef7); color: #fff; }
 
     .sidebar {
       background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
@@ -110,12 +99,10 @@
     .stat-row:last-of-type { border-bottom: none; }
     .stat-label { color: #9aa0b4; }
     .stat-accent { font-weight: 700; }
-    .conversion-block { margin-top: 1rem; }
-    .conversion-block h3 { margin-bottom: 0.75rem; }
     .conv-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 0.35rem 0; border-bottom: 1px solid #1a1d2e; color: #9aa0b4; }
     .conv-row span:last-child { color: #4fc97e; font-weight: 700; }
 
-    .footer-actions { max-width: 1200px; margin: 1.5rem auto 0; display: flex; justify-content: center; }
+    .footer-actions { max-width: 1300px; margin: 1.5rem auto 0; display: flex; justify-content: center; }
     .reset-btn {
       background: transparent; color: #5a607a; border: 1px solid #2a2f45; border-radius: 8px;
       padding: 0.45rem 1.2rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
@@ -123,30 +110,33 @@
     }
     .reset-btn:hover { color: #e05555; border-color: #e05555; }
 
-    /* ── Messages Tab ── */
-    .messages-layout {
-      max-width: 1200px; margin: 0 auto;
-      display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start;
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(79,142,247,0); }
+      100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
     }
-    @media (max-width: 800px) { .messages-layout { grid-template-columns: 1fr; } }
+    .card.pulse { animation: pulse-ring 0.5s ease-out; }
 
-    .nav-panel { background: #1c1f2e; border-radius: 14px; padding: 1rem; border: 1px solid #252840; position: sticky; top: 1.5rem; }
-    .nav-panel h3 { font-size: 0.72rem; color: #444a66; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid #252840; }
-    .kampagne-section { margin-bottom: 1rem; }
-    .kampagne-label { font-size: 0.7rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem; }
-    .nav-item {
-      display: block; width: 100%; text-align: left; background: none; border: none;
-      color: #9aa0b4; font-size: 0.82rem; padding: 0.4rem 0.6rem; border-radius: 6px;
-      cursor: pointer; transition: background 0.15s, color 0.15s; margin-bottom: 0.15rem;
+    /* ── MESSAGES TAB ── */
+    .messages-wrap { max-width: 1300px; margin: 0 auto; }
+    .kampagne-block { margin-bottom: 3rem; }
+    .kampagne-title {
+      font-size: 0.72rem; color: #5a607a;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1.25rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid #252840;
     }
-    .nav-item:hover { background: #252840; color: #e8eaf0; }
-    .nav-item.active { background: #252840; color: #e8eaf0; }
-
-    .messages-panel { display: flex; flex-direction: column; gap: 1rem; }
-    .msg-loading { text-align: center; color: #5a607a; padding: 3rem; font-size: 0.9rem; }
-
+    .stage-block { margin-bottom: 2rem; }
+    .stage-title {
+      font-size: 0.82rem; font-weight: 700; color: #9aa0b4;
+      margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+    }
+    .stage-title-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--stage-accent, #4f8ef7); display: inline-block; flex-shrink: 0;
+    }
     .ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    @media (max-width: 600px) { .ab-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 700px) { .ab-grid { grid-template-columns: 1fr; } }
 
     .msg-card {
       background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
@@ -160,10 +150,10 @@
     .msg-card.variant-a::before { background: #4f8ef7; }
     .msg-card.variant-b::before { background: #a259f7; }
 
-    .msg-header { display: flex; justify-content: space-between; align-items: center; }
+    .msg-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     .variant-badge {
-      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 0.2rem 0.6rem; border-radius: 20px;
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px;
     }
     .msg-card.variant-a .variant-badge { background: #4f8ef722; color: #4f8ef7; }
     .msg-card.variant-b .variant-badge { background: #a259f722; color: #a259f7; }
@@ -174,93 +164,41 @@
       background: #0f1117; border-radius: 8px; padding: 0.85rem;
       white-space: pre-wrap; flex: 1;
     }
-
-    /* Action-Zeile unter jeder Nachricht */
     .msg-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
     .copy-btn {
       background: #4f8ef7; color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      transition: filter 0.15s; flex: 1; min-width: 100px;
+      transition: filter 0.15s; flex: 1; min-width: 80px;
     }
     .msg-card.variant-b .copy-btn { background: #a259f7; }
     .copy-btn:hover { filter: brightness(1.15); }
     .copy-btn.copied { background: #27ae60 !important; }
 
-    /* Mini Counter-Buttons in Nachricht */
-    .msg-minus-btn {
-      background: #252840; color: #9aa0b4; border: none; border-radius: 8px;
-      padding: 0.45rem 0.6rem; font-size: 0.9rem; font-weight: 700; cursor: pointer;
-      transition: background 0.15s; flex-shrink: 0;
-    }
-    .msg-minus-btn:hover { background: #c0392b22; color: #e05555; }
-
-    .msg-plus-btn {
-      color: #fff; border: none; border-radius: 8px;
-      padding: 0.45rem 0.7rem; font-size: 0.9rem; font-weight: 700; cursor: pointer;
-      transition: filter 0.15s; flex-shrink: 0;
-    }
-    .msg-card.variant-a .msg-plus-btn { background: #4f8ef7; }
-    .msg-card.variant-b .msg-plus-btn { background: #a259f7; }
-    .msg-plus-btn:hover { filter: brightness(1.2); }
-
-    .msg-plus5-btn {
-      background: transparent; border: 2px solid; border-radius: 8px;
-      padding: 0.45rem 0.55rem; font-size: 0.78rem; font-weight: 700; cursor: pointer;
-      transition: background 0.15s, color 0.15s; flex-shrink: 0;
-    }
-    .msg-card.variant-a .msg-plus5-btn { color: #4f8ef7; border-color: #4f8ef7; }
-    .msg-card.variant-b .msg-plus5-btn { color: #a259f7; border-color: #a259f7; }
-    .msg-card.variant-a .msg-plus5-btn:hover { background: #4f8ef7; color: #fff; }
-    .msg-card.variant-b .msg-plus5-btn:hover { background: #a259f7; color: #fff; }
-
-    /* Stage-Counter-Badge in Nachrichten */
-    .stage-counter-badge {
-      font-size: 0.7rem; color: #444a66; background: #252840;
-      border-radius: 6px; padding: 0.2rem 0.5rem; display: flex; align-items: center; gap: 0.3rem;
-    }
-    .stage-counter-badge strong { color: #9aa0b4; }
-
-    /* ── A/B Stats Tab ── */
-    .stats-layout { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
-
-    .stats-kampagne-block { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    @media (max-width: 800px) { .stats-kampagne-block { grid-template-columns: 1fr; } }
-
+    /* ── A/B STATS TAB ── */
+    .stats-wrap { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
     .stats-kampagne-title {
-      max-width: 1200px; font-size: 0.72rem; color: #5a607a;
-      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
-      padding-bottom: 0.5rem; border-bottom: 1px solid #252840;
+      font-size: 0.72rem; color: #5a607a;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid #252840;
     }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
 
     .stats-card { background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840; }
     .stats-card h3 { font-size: 0.78rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
-
-    .ab-stat-row {
-      display: flex; align-items: center; padding: 0.5rem 0;
-      border-bottom: 1px solid #1a1d2e; gap: 0.5rem;
-    }
+    .ab-stat-row { display: flex; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d2e; gap: 0.5rem; }
     .ab-stat-row:last-child { border-bottom: none; }
-    .ab-stat-label { font-size: 0.78rem; color: #9aa0b4; min-width: 130px; }
+    .ab-stat-label { font-size: 0.78rem; color: #9aa0b4; min-width: 140px; }
     .ab-bar-wrap { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
     .ab-bar { height: 6px; border-radius: 3px; min-width: 4px; transition: width 0.4s; }
     .bar-a { background: #4f8ef7; }
     .bar-b { background: #a259f7; }
     .ab-counts { display: flex; gap: 0.4rem; font-size: 0.72rem; }
-
-    /* Funnel-Block pro Kampagne */
-    .funnel-card { background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840; }
-    .funnel-card h3 { font-size: 0.78rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
-    .funnel-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0; border-bottom: 1px solid #1a1d2e; font-size: 0.82rem; }
-    .funnel-stat-row:last-child { border-bottom: none; }
-    .funnel-conv { color: #4fc97e; font-weight: 700; font-size: 0.78rem; }
-
-    @keyframes pulse-ring {
-      0%   { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
-      70%  { box-shadow: 0 0 0 10px rgba(79,142,247,0); }
-      100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
-    }
-    .card.pulse { animation: pulse-ring 0.5s ease-out; }
+    .ab-count-a { color: #4f8ef7; font-weight: 700; }
+    .ab-count-b { color: #a259f7; font-weight: 700; }
+    .ab-empty { font-size: 0.78rem; color: #444a66; font-style: italic; }
   </style>
 </head>
 <body>
@@ -275,21 +213,21 @@
 </header>
 
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('counter', this)">🎯 Counter</button>
-  <button class="tab-btn" onclick="switchTab('messages', this)">💬 Nachrichten</button>
-  <button class="tab-btn" onclick="switchTab('stats', this)">📈 A/B Stats</button>
+  <button class="tab-btn active" onclick="switchTab('counter',this)">🎯 Counter</button>
+  <button class="tab-btn" onclick="switchTab('messages',this)">💬 Nachrichten</button>
+  <button class="tab-btn" onclick="switchTab('stats',this)">📈 A/B Stats</button>
 </div>
 
 <!-- Tab: Counter -->
 <div id="tab-counter" class="tab-content active">
-  <div class="main-layout">
-    <div class="grid" id="card-grid"></div>
+  <div class="counter-layout">
+    <div class="counter-grid" id="card-grid"></div>
     <div class="sidebar">
       <h3>📈 Auswertung</h3>
       <div id="stats-total"></div>
-      <div class="conversion-block">
+      <div style="margin-top:1rem">
         <h3>🔄 Conversions</h3>
-        <div id="stats-conv"></div>
+        <div id="stats-conv" style="margin-top:0.75rem"></div>
       </div>
     </div>
   </div>
@@ -298,495 +236,416 @@
   </div>
 </div>
 
-<!-- Tab: Nachrichten -->
+<!-- Tab: Nachrichten (flat scroll) -->
 <div id="tab-messages" class="tab-content">
-  <div class="messages-layout">
-    <div class="nav-panel">
-      <h3>Kampagnen</h3>
-      <div class="kampagne-section">
-        <div class="kampagne-label">Leadgenerierung</div>
-        <button class="nav-item active" onclick="selectNav('leadgen','dm1',this)">DM 1</button>
-        <button class="nav-item" onclick="selectNav('leadgen','pitch',this)">Pitch</button>
-        <button class="nav-item" onclick="selectNav('leadgen','follow_up',this)">Follow-up</button>
-        <button class="nav-item" onclick="selectNav('leadgen','einwandbehandlung',this)">Einwandbehandlung</button>
-        <button class="nav-item" onclick="selectNav('leadgen','positive_antwort',this)">Positive Antwort</button>
-        <button class="nav-item" onclick="selectNav('leadgen','erstgespraech',this)">Erstgespräch</button>
-      </div>
-      <div class="kampagne-section">
-        <div class="kampagne-label">Support & FAQ</div>
-        <button class="nav-item" onclick="selectNav('support','dm1',this)">DM 1</button>
-        <button class="nav-item" onclick="selectNav('support','pitch',this)">Pitch</button>
-        <button class="nav-item" onclick="selectNav('support','follow_up',this)">Follow-up</button>
-        <button class="nav-item" onclick="selectNav('support','einwandbehandlung',this)">Einwandbehandlung</button>
-        <button class="nav-item" onclick="selectNav('support','positive_antwort',this)">Positive Antwort</button>
-        <button class="nav-item" onclick="selectNav('support','erstgespraech',this)">Erstgespräch</button>
-      </div>
-    </div>
-    <div class="messages-panel" id="messages-panel">
-      <div class="msg-loading">⏳ Lade Nachrichten aus Notion…</div>
-    </div>
+  <div class="messages-wrap" id="messages-wrap">
+    <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Nachrichten aus Notion…</div>
   </div>
 </div>
 
 <!-- Tab: A/B Stats -->
 <div id="tab-stats" class="tab-content">
-  <div class="stats-layout" id="ab-stats-root">
-    <div class="msg-loading">⏳ Lade Statistiken…</div>
+  <div class="stats-wrap" id="stats-wrap">
+    <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Statistiken…</div>
   </div>
 </div>
 
 <script>
-  // ══════════════════════════════════════════════════════
-  // KONFIGURATION
-  // ══════════════════════════════════════════════════════
-  const SUPABASE_URL  = "https://wvfooydrjkcoamohylch.supabase.co";
-  const SUPABASE_KEY  = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
-  const NOTION_PROXY  = "https://linkedin-dashboard.stenrobbin.workers.dev/";
-  const NOTION_DB_ID  = "99f511e015ca82538b2b81cc51b56ef8";
-  const COUNTER_TABLE = "counter_events";
-  const MESSAGES_TABLE = "message_uses";
+// ══════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════
+const SUPABASE_URL   = "https://wvfooydrjkcoamohylch.supabase.co";
+const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
+const NOTION_PROXY   = "https://linkedin-dashboard.stenrobbin.workers.dev/";
+const NOTION_DB_ID   = "99f511e015ca82538b2b81cc51b56ef8";
 
-  const STAGES = [
-    { key: "kontaktanfrage",    label: "Kontakt­anfrage",    accent: "#4f8ef7" },
-    { key: "vernetzt",          label: "Vernetzt",           accent: "#5b8dee" },
-    { key: "dm1",               label: "DM 1",               accent: "#7c6ff7" },
-    { key: "pitch",             label: "Pitch",              accent: "#a259f7" },
-    { key: "follow_up",         label: "Follow-up",          accent: "#f7925a" },
-    { key: "einwandbehandlung", label: "Einwand­behandlung", accent: "#f75a5a" },
-    { key: "positive_antwort",  label: "Positive Antwort",   accent: "#4fc97e" },
-    { key: "erstgespraech",     label: "Erst­gespräch",      accent: "#27ae60" },
-  ];
-  const STAGES_WITH_PLUS5 = ["kontaktanfrage", "vernetzt", "dm1", "pitch"];
+const STAGES = [
+  { key: "kontaktanfrage",    label: "Kontaktanfrage",    accent: "#4f8ef7" },
+  { key: "vernetzt",          label: "Vernetzt",           accent: "#5b8dee" },
+  { key: "dm1",               label: "DM 1",               accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",              accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",          accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung",  accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",   accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",       accent: "#27ae60" },
+];
+const STAGES_PLUS5 = ["kontaktanfrage","vernetzt","dm1","pitch"];
 
-  // Stage-Keys die durch Nachricht-Aktionen erhöht werden
-  const MSG_STAGE_TO_COUNTER = {
-    dm1: "dm1", pitch: "pitch", follow_up: "follow_up",
-    einwandbehandlung: "einwandbehandlung",
-    positive_antwort: "positive_antwort", erstgespraech: "erstgespraech"
-  };
+const MSG_STAGES = [
+  { key: "dm1",               label: "DM 1",               accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",              accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",          accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung",  accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",   accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",       accent: "#27ae60" },
+];
 
-  const MSG_STAGES = ["dm1","pitch","follow_up","einwandbehandlung","positive_antwort","erstgespraech"];
-  const MSG_STAGE_LABELS = {
-    dm1: "DM 1", pitch: "Pitch", follow_up: "Follow-up",
-    einwandbehandlung: "Einwandbehandlung", positive_antwort: "Positive Antwort", erstgespraech: "Erstgespräch"
-  };
-  const KAMPAGNEN = [
-    { key: "leadgen", label: "Leadgenerierung" },
-    { key: "support", label: "Support & FAQ" },
-  ];
+const KAMPAGNEN = [
+  { key: "leadgen", label: "Leadgenerierung" },
+  { key: "support", label: "Support & FAQ" },
+];
 
-  // ══════════════════════════════════════════════════════
-  // SUPABASE
-  // ══════════════════════════════════════════════════════
-  const { createClient } = supabase;
-  const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+// ══════════════════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════════════════
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // ══════════════════════════════════════════════════════
-  // COUNTER STATE
-  // ══════════════════════════════════════════════════════
-  const state = {};
+// ══════════════════════════════════════════════
+// COUNTER STATE
+// ══════════════════════════════════════════════
+const state = {};
+STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
+
+// message_uses aggregiert für UI: { kampagne_stage_variante: count }
+let msgUses = {};
+// Notion messages cache: { kampagne: { stage: [ {variante, text, fokus} ] } }
+let notionCache = {};
+
+function renderCards() {
+  document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => {
+    const p5 = STAGES_PLUS5.includes(s.key);
+    return `
+      <div class="card" id="card-${s.key}" style="--accent:${s.accent}">
+        <span class="stage-num">Stage ${i+1}</span>
+        <h2>${s.label}</h2>
+        <div class="count" id="count-${s.key}">0</div>
+        <div class="last-click" id="last-${s.key}"></div>
+        <div class="btn-row">
+          <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}',-1)">−1</button>
+          <button class="plus-btn"  onclick="handleClick('${s.key}',1)">+1</button>
+          ${p5 ? `<button class="plus5-btn" onclick="handleClick('${s.key}',5)">+5</button>` : ""}
+        </div>
+      </div>`;
+  }).join("");
+}
+
+async function loadCounterState() {
+  const { data, error } = await db
+    .from("counter_events")
+    .select("stage, delta, created_at")
+    .order("created_at", { ascending: false });
+  if (error) { console.error(error); return; }
+
+  // Reset
   STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
-
-  function renderCards() {
-    document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => {
-      const hasPlus5 = STAGES_WITH_PLUS5.includes(s.key);
-      return `
-        <div class="card" id="card-${s.key}" style="--accent: ${s.accent}">
-          <span class="stage-num">Stage ${i + 1}</span>
-          <h2>${s.label}</h2>
-          <div class="count" id="count-${s.key}">0</div>
-          <div class="last-click" id="last-${s.key}"></div>
-          <div class="btn-row">
-            <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}', -1)">−1</button>
-            <button class="plus-btn"  id="btn-${s.key}"   onclick="handleClick('${s.key}',  1)">+1</button>
-            ${hasPlus5 ? `<button class="plus5-btn" id="btn5-${s.key}" onclick="handleClick('${s.key}', 5)">+5</button>` : ""}
-          </div>
-        </div>`;
-    }).join("");
+  // Aggregate
+  for (const row of [...data].reverse()) {
+    const s = state[row.stage];
+    if (!s) continue;
+    s.count += row.delta;
+    if (s.count < 0) s.count = 0;
+    s.lastClick = row.created_at;
   }
+  updateAllCounterUI();
+}
 
-  function updateUI(key) {
-    const countEl = document.getElementById(`count-${key}`);
-    const lastEl  = document.getElementById(`last-${key}`);
-    if (!countEl) return;
-    countEl.textContent = state[key].count;
-    lastEl.textContent  = state[key].lastClick
-      ? `${new Date(state[key].lastClick).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })} Uhr`
-      : "";
-    updateSidebar();
-    // Stage-Badge in Nachrichten-Tab aktualisieren
-    document.querySelectorAll(`.stage-badge-count[data-stage="${key}"]`).forEach(el => {
-      el.textContent = state[key].count;
-    });
-  }
-
-  function pulseCard(key) {
-    const card = document.getElementById(`card-${key}`);
-    if (!card) return;
-    card.classList.remove("pulse");
-    void card.offsetWidth;
-    card.classList.add("pulse");
-  }
-
-  function setStatus(msg) { document.getElementById("sync-status").textContent = msg; }
-
-  function conv(a, b) { if (!a || !b) return "–"; return (b / a * 100).toFixed(1) + "%"; }
-
-  function updateSidebar() {
-    const c = key => state[key]?.count || 0;
-    document.getElementById("stats-total").innerHTML = STAGES.map(s => `
-      <div class="stat-row">
-        <span class="stat-label">${s.label}</span>
-        <span class="stat-accent" style="color:${s.accent}">${c(s.key)}</span>
-      </div>`).join("");
-    const convData = [
-      ["Anfrage → Vernetzt",      c("kontaktanfrage"),   c("vernetzt")],
-      ["Vernetzt → DM 1",         c("vernetzt"),         c("dm1")],
-      ["DM 1 → Pitch",            c("dm1"),              c("pitch")],
-      ["Pitch → Pos. Antwort",    c("pitch"),            c("positive_antwort")],
-      ["Pos. Antwort → Gespräch", c("positive_antwort"), c("erstgespraech")],
-      ["Gesamt",                  c("kontaktanfrage"),   c("erstgespraech")],
-    ];
-    document.getElementById("stats-conv").innerHTML = convData.map(([label, a, b]) => `
-      <div class="conv-row"><span>${label}</span><span>${conv(a, b)}</span></div>`).join("");
-  }
-
-  async function loadCounts() {
-    setStatus("⏳ Lade Daten…");
-    const { data, error } = await db.from(COUNTER_TABLE).select("*").order("created_at");
-    if (error) { setStatus("🔴 Verbindungsfehler"); return; }
-    STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
-    data.forEach(r => {
-      if (state[r.stage] !== undefined) {
-        state[r.stage].count     += (r.delta || 1);
-        state[r.stage].lastClick  = r.created_at;
-      }
-    });
-    STAGES.forEach(s => updateUI(s.key));
-    setStatus("🟢 Synchronisiert");
-  }
-
-  // Kern-Funktion: Counter schreiben (wird von Counter-Tab UND Nachrichten-Tab genutzt)
-  async function handleClick(stageKey, delta, skipUILock) {
-    if (delta < 0 && state[stageKey].count <= 0) return;
-    if (!skipUILock) {
-      ["btn","minus","btn5"].forEach(p => {
-        const b = document.getElementById(`${p}-${stageKey}`);
-        if (b) b.disabled = true;
-      });
+function updateAllCounterUI() {
+  STAGES.forEach(s => {
+    document.getElementById(`count-${s.key}`).textContent = state[s.key].count;
+    const minusBtn = document.getElementById(`minus-${s.key}`);
+    if (minusBtn) minusBtn.disabled = state[s.key].count <= 0;
+    const last = document.getElementById(`last-${s.key}`);
+    if (last && state[s.key].lastClick) {
+      last.textContent = "zuletzt " + new Date(state[s.key].lastClick).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
     }
-    const { error } = await db.from(COUNTER_TABLE).insert({
-      stage: stageKey, delta,
-      source: /iPhone|iPad|iPod/.test(navigator.userAgent) ? "ios" : "mac",
-    });
-    if (error) {
-      setStatus("🔴 Speichern fehlgeschlagen");
-      if (!skipUILock) {
-        ["btn","minus","btn5"].forEach(p => {
-          const b = document.getElementById(`${p}-${stageKey}`);
-          if (b) b.disabled = false;
-        });
-      }
+  });
+  renderSidebar();
+}
+
+async function handleClick(key, delta) {
+  const s = state[key];
+  const newCount = s.count + delta;
+  if (newCount < 0) return;
+
+  s.count = newCount;
+  s.lastClick = new Date().toISOString();
+  updateAllCounterUI();
+
+  const card = document.getElementById(`card-${key}`);
+  card.classList.remove("pulse");
+  void card.offsetWidth;
+  card.classList.add("pulse");
+
+  const { error } = await db.from("counter_events").insert({ stage: key, delta });
+  if (error) console.error("Insert error:", error);
+}
+
+function renderSidebar() {
+  const dm1  = state["dm1"].count;
+  const pitch = state["pitch"].count;
+  const pos  = state["positive_antwort"].count;
+  const erst = state["erstgespraech"].count;
+  const kont = state["kontaktanfrage"].count;
+  const vern = state["vernetzt"].count;
+
+  document.getElementById("stats-total").innerHTML = STAGES.map(s =>
+    `<div class="stat-row"><span class="stat-label">${s.label}</span><span class="stat-accent" style="color:${s.accent}">${state[s.key].count}</span></div>`
+  ).join("");
+
+  const convs = [
+    ["Anfrage → Vernetzt", kont, vern],
+    ["Vernetzt → DM 1",    vern, dm1],
+    ["DM 1 → Pitch",       dm1,  pitch],
+    ["Pitch → Positiv",    pitch, pos],
+    ["Positiv → Gespräch", pos,  erst],
+  ];
+  document.getElementById("stats-conv").innerHTML = convs.map(([lbl,a,b]) => {
+    const pct = a > 0 ? Math.round(b/a*100) : 0;
+    return `<div class="conv-row"><span>${lbl}</span><span>${pct}%</span></div>`;
+  }).join("");
+}
+
+async function resetAll() {
+  if (!confirm("Alle Zähler auf 0 zurücksetzen?")) return;
+  await db.from("counter_events").delete().neq("id", 0);
+  STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
+  updateAllCounterUI();
+}
+
+function exportJSON() {
+  const out = {};
+  STAGES.forEach(s => out[s.key] = state[s.key].count);
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "outreach_export.json";
+  a.click();
+}
+
+// ══════════════════════════════════════════════
+// NOTION MESSAGES
+// ══════════════════════════════════════════════
+async function loadMessages() {
+  const status = document.getElementById("sync-status");
+  status.textContent = "🔄 Lade…";
+  try {
+    const res = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
+    const json = await res.json();
+    const results = json.results || [];
+
+    notionCache = {};
+    for (const page of results) {
+      const p = page.properties;
+      const kampagne  = getText(p.Kampagne)  || getText(p.kampagne)  || "leadgen";
+      const stage     = getText(p.Stage)     || getText(p.stage)     || "dm1";
+      const variante  = getText(p.Variante)  || getText(p.variante)  || "a";
+      const nachricht = getText(p.Nachricht) || getText(p.nachricht) || getText(p.Text) || "";
+      const fokus     = getText(p.Fokus)     || getText(p.fokus)     || "";
+      if (!nachricht) continue;
+      const k = kampagne.toLowerCase().replace(/[^a-z0-9_]/g,"_");
+      const st = stage.toLowerCase().replace(/[^a-z0-9_]/g,"_");
+      const v = variante.toLowerCase().trim();
+      if (!notionCache[k]) notionCache[k] = {};
+      if (!notionCache[k][st]) notionCache[k][st] = [];
+      notionCache[k][st].push({ variante: v, text: nachricht, fokus });
     }
+    status.textContent = `✅ ${results.length} Nachrichten`;
+  } catch (e) {
+    console.error(e);
+    status.textContent = "❌ Fehler";
   }
+  renderMessagesFlat();
+}
 
-  // Mini-Counter aus Nachrichten-Tab — NUR Counter erhöhen, KEIN message_uses Tracking
-  // A/B Tracking passiert ausschließlich über den Kopieren-Button
-  async function msgHandleClick(stageKey, delta, cardId) {
-    if (delta < 0 && state[stageKey].count <= 0) return;
-    // Buttons im Nachrichts-Card kurz sperren
-    const card = document.getElementById(cardId);
-    if (card) card.querySelectorAll("button").forEach(b => b.disabled = true);
+function getText(prop) {
+  if (!prop) return "";
+  if (prop.type === "title" && prop.title) return prop.title.map(t => t.plain_text).join("");
+  if (prop.type === "rich_text" && prop.rich_text) return prop.rich_text.map(t => t.plain_text).join("");
+  if (prop.type === "select" && prop.select) return prop.select.name || "";
+  return "";
+}
 
-    // Nur Counter erhöhen – kein A/B Tracking hier
-    await handleClick(stageKey, delta, true);
+async function reloadMessages() {
+  await loadMessages();
+  await loadMsgUses();
+}
 
-    // Freischalten kommt über Realtime
-  }
+// ── Flat rendering ──────────────────────────────
+function renderMessagesFlat() {
+  const wrap = document.getElementById("messages-wrap");
+  let html = "";
 
-  function subscribeRealtime() {
-    db.channel("counter_realtime")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: COUNTER_TABLE }, (payload) => {
-        const r = payload.new;
-        if (state[r.stage] !== undefined) {
-          state[r.stage].count += (r.delta || 1);
-          state[r.stage].lastClick = r.created_at;
-          if (state[r.stage].count < 0) state[r.stage].count = 0;
-          updateUI(r.stage);
-          if (r.delta > 0) pulseCard(r.stage);
-          setStatus("🟢 Synchronisiert");
-          ["btn","minus","btn5"].forEach(p => {
-            const b = document.getElementById(`${p}-${r.stage}`);
-            if (b) b.disabled = false;
-          });
-          // Alle Buttons in Nachrichtskarten freischalten
-          document.querySelectorAll(".msg-card button").forEach(b => b.disabled = false);
-          // A/B Stats neu rendern wenn Tab aktiv
-          if (document.getElementById("tab-stats").classList.contains("active")) renderABStats();
-        }
-      })
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: COUNTER_TABLE }, () => loadCounts())
-      .subscribe(s => {
-        if (s === "SUBSCRIBED") setStatus("🟢 Synchronisiert");
-        if (s === "CHANNEL_ERROR") setStatus("🔴 Realtime-Fehler");
-      });
-  }
+  for (const kamp of KAMPAGNEN) {
+    html += `<div class="kampagne-block">`;
+    html += `<div class="kampagne-title">${kamp.label}</div>`;
 
-  async function resetAll() {
-    if (!confirm("Alle Zähler wirklich auf 0 zurücksetzen?")) return;
-    setStatus("⏳ Lösche…");
-    const { error } = await db.from(COUNTER_TABLE).delete().neq("id", 0);
-    if (error) { setStatus("🔴 Reset fehlgeschlagen"); return; }
-    setStatus("🟢 Zurückgesetzt");
-  }
+    for (const st of MSG_STAGES) {
+      const variants = (notionCache[kamp.key] && notionCache[kamp.key][st.key]) || [];
+      if (variants.length === 0) continue;
 
-  function exportJSON() {
-    const c = key => state[key]?.count || 0;
-    const data = {
-      exportedAt: new Date().toISOString(),
-      counts: Object.fromEntries(STAGES.map(s => [s.key, c(s.key)])),
-      conversions: {
-        anfrage_vernetzt: conv(c("kontaktanfrage"), c("vernetzt")),
-        vernetzt_dm1:     conv(c("vernetzt"),       c("dm1")),
-        dm1_pitch:        conv(c("dm1"),            c("pitch")),
-        pitch_positiv:    conv(c("pitch"),          c("positive_antwort")),
-        positiv_call:     conv(c("positive_antwort"), c("erstgespraech")),
-        gesamt:           conv(c("kontaktanfrage"), c("erstgespraech")),
-      }
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = Object.assign(document.createElement("a"), {
-      href: URL.createObjectURL(blob),
-      download: `outreach-${new Date().toISOString().slice(0,10)}.json`
-    });
-    a.click();
-  }
+      html += `<div class="stage-block">`;
+      html += `<div class="stage-title" style="--stage-accent:${st.accent}"><span class="stage-title-dot"></span>${st.label}</div>`;
+      html += `<div class="ab-grid">`;
 
-  // ══════════════════════════════════════════════════════
-  // NOTION NACHRICHTEN
-  // ══════════════════════════════════════════════════════
-  let notionCache = [];
-  let msgUseCounts = {};
-  let currentKampagne = "leadgen";
-  let currentStage    = "dm1";
-
-  async function loadNotionMessages() {
-    try {
-      const res = await fetch(`${NOTION_PROXY}/query`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ database_id: NOTION_DB_ID }),
-      });
-      const data = await res.json();
-      notionCache = data.results || [];
-    } catch (e) {
-      console.error("Notion Fehler:", e);
-      notionCache = [];
-    }
-  }
-
-  async function loadMessageUseCounts() {
-    const { data } = await db.from(MESSAGES_TABLE).select("kampagne,stage,variante");
-    msgUseCounts = {};
-    (data || []).forEach(r => {
-      const key = `${r.kampagne}__${r.stage}__${r.variante}`;
-      msgUseCounts[key] = (msgUseCounts[key] || 0) + 1;
-    });
-  }
-
-  function getMessages(kampagne, stage) {
-    return notionCache.filter(p => {
-      const props = p.properties;
-      return props.kampagne?.select?.name === kampagne &&
-             props.stage?.select?.name    === stage &&
-             props.aktiv?.checkbox        === true;
-    });
-  }
-
-  function getTextFromNotion(page) {
-    const t = page.properties.text;
-    if (!t?.rich_text) return "";
-    return t.rich_text.map(x => x.plain_text).join("");
-  }
-
-  function renderMessages(kampagne, stage) {
-    const panel    = document.getElementById("messages-panel");
-    const msgs     = getMessages(kampagne, stage);
-    const stageKey = MSG_STAGE_TO_COUNTER[stage];
-
-    if (!msgs.length) {
-      panel.innerHTML = `<div class="msg-loading">Keine Nachrichten für diese Stage.<br><small style="color:#444a66">Notion-Einträge prüfen oder Sync klicken.</small></div>`;
-      return;
-    }
-
-    const sorted = [...msgs].sort((a,b) => {
-      const va = a.properties.variante?.select?.name || "A";
-      const vb = b.properties.variante?.select?.name || "A";
-      return va.localeCompare(vb);
-    });
-
-    panel.innerHTML = `<div class="ab-grid">${sorted.map((page, idx) => {
-      const props    = page.properties;
-      const variante = props.variante?.select?.name || "A";
-      const text     = getTextFromNotion(page);
-      const fokus    = props.fokus?.rich_text?.[0]?.plain_text || "";
-      const useKey   = `${kampagne}__${stage}__${variante}`;
-      const uses     = msgUseCounts[useKey] || 0;
-      const cardId   = `msg-card-${kampagne}-${stage}-${variante}`;
-      const currentCount = state[stageKey]?.count || 0;
-
-      return `
-        <div class="msg-card variant-${variante.toLowerCase()}" id="${cardId}">
-          <div class="msg-header">
-            <span class="variant-badge">Variante ${variante}</span>
-            <span class="use-count" id="usecount-${useKey}">${uses}× kopiert</span>
-          </div>
-          ${fokus ? `<div class="fokus-tag">💡 ${fokus}</div>` : ""}
-          <div class="msg-text">${text}</div>
-          <div class="msg-actions">
-            <button class="copy-btn" onclick="copyMessage(this, '${kampagne}', '${stage}', '${variante}', \`${text.replace(/`/g,"\\`").replace(/\$/g,"\\$")}\`)">
-              📋 Kopieren + Zählen
-            </button>
-          </div>
-          <div class="msg-actions">
-            <button class="msg-minus-btn" onclick="msgHandleClick('${stageKey}', -1, '${cardId}')">−1</button>
-            <button class="msg-plus-btn"  onclick="msgHandleClick('${stageKey}',  1, '${cardId}')">+1</button>
-            <button class="msg-plus5-btn" onclick="msgHandleClick('${stageKey}',  5, '${cardId}')">+5</button>
-            <div class="stage-counter-badge">
-              ${MSG_STAGE_LABELS[stage]}: <strong class="stage-badge-count" data-stage="${stageKey}">${currentCount}</strong>
+      for (const v of variants) {
+        const vClass = v.variante === "b" ? "variant-b" : "variant-a";
+        const useKey = `${kamp.key}_${st.key}_${v.variante}`;
+        const uses   = msgUses[useKey] || 0;
+        const btnId  = `copy-${kamp.key}-${st.key}-${v.variante}-${Math.random().toString(36).slice(2,6)}`;
+        html += `
+          <div class="msg-card ${vClass}">
+            <div class="msg-header">
+              <span class="variant-badge">Variante ${v.variante.toUpperCase()}</span>
+              <span class="use-count" id="uses-${useKey}">${uses}× verwendet</span>
             </div>
-          </div>
-        </div>`;
-    }).join("")}</div>`;
-  }
-
-  async function copyMessage(btn, kampagne, stage, variante, text) {
-    await navigator.clipboard.writeText(text);
-    btn.textContent = "✅ Kopiert!";
-    btn.classList.add("copied");
-    setTimeout(() => { btn.textContent = "📋 Kopieren + Zählen"; btn.classList.remove("copied"); }, 2000);
-
-    // 1. Nachrichtsnutzung tracken (A/B Counter)
-    await db.from(MESSAGES_TABLE).insert({
-      kampagne, stage, variante,
-      source: /iPhone|iPad|iPod/.test(navigator.userAgent) ? "ios" : "mac",
-    });
-    const useKey = `${kampagne}__${stage}__${variante}`;
-    msgUseCounts[useKey] = (msgUseCounts[useKey] || 0) + 1;
-    const el = document.getElementById(`usecount-${useKey}`);
-    if (el) el.textContent = `${msgUseCounts[useKey]}× kopiert`;
-
-    // 2. Counter-Stage automatisch +1
-    const stageKey = MSG_STAGE_TO_COUNTER[stage];
-    if (stageKey) await handleClick(stageKey, 1, true);
-
-    if (document.getElementById("tab-stats").classList.contains("active")) renderABStats();
-  }
-
-  function selectNav(kampagne, stage, btn) {
-    document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentKampagne = kampagne;
-    currentStage    = stage;
-    renderMessages(kampagne, stage);
-  }
-
-  async function reloadMessages() {
-    document.getElementById("messages-panel").innerHTML = `<div class="msg-loading">⏳ Lade aus Notion…</div>`;
-    await loadNotionMessages();
-    await loadMessageUseCounts();
-    renderMessages(currentKampagne, currentStage);
-    if (document.getElementById("tab-stats").classList.contains("active")) renderABStats();
-  }
-
-  // ══════════════════════════════════════════════════════
-  // A/B STATS (mit Funnel pro Kampagne)
-  // ══════════════════════════════════════════════════════
-  function renderABStats() {
-    const root = document.getElementById("ab-stats-root");
-    const c    = key => state[key]?.count || 0;
-
-    root.innerHTML = KAMPAGNEN.map(k => {
-      const abRows = MSG_STAGES.map(stage => {
-        const a     = msgUseCounts[`${k.key}__${stage}__A`] || 0;
-        const b     = msgUseCounts[`${k.key}__${stage}__B`] || 0;
-        const total = a + b || 1;
-        const wA    = Math.round((a / total) * 80);
-        const wB    = Math.round((b / total) * 80);
-        return `
-          <div class="ab-stat-row">
-            <span class="ab-stat-label">${MSG_STAGE_LABELS[stage]}</span>
-            <div class="ab-bar-wrap">
-              <div class="ab-bar bar-a" style="width:${wA}px"></div>
-              <div class="ab-bar bar-b" style="width:${wB}px"></div>
-            </div>
-            <div class="ab-counts">
-              <span style="color:#4f8ef7">A: ${a}</span>
-              <span style="color:#a259f7">B: ${b}</span>
+            ${v.fokus ? `<div class="fokus-tag">${v.fokus}</div>` : ""}
+            <div class="msg-text">${escHtml(v.text)}</div>
+            <div class="msg-actions">
+              <button class="copy-btn" id="${btnId}"
+                onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
+                📋 Kopieren
+              </button>
             </div>
           </div>`;
-      }).join("");
+      }
+      html += `</div></div>`; // ab-grid / stage-block
+    }
+    html += `</div>`; // kampagne-block
+  }
 
-      const funnelRows = [
-        ["Kontaktanfrage", c("kontaktanfrage"), null],
-        ["Vernetzt",       c("vernetzt"),       conv(c("kontaktanfrage"), c("vernetzt"))],
-        ["DM 1",           c("dm1"),            conv(c("vernetzt"),       c("dm1"))],
-        ["Pitch",          c("pitch"),          conv(c("dm1"),            c("pitch"))],
-        ["Follow-up",      c("follow_up"),      null],
-        ["Pos. Antwort",   c("positive_antwort"), conv(c("pitch"),        c("positive_antwort"))],
-        ["Erstgespräch",   c("erstgespraech"),  conv(c("positive_antwort"), c("erstgespraech"))],
-      ].map(([label, count, rate]) => `
-        <div class="funnel-stat-row">
-          <span style="color:#9aa0b4;font-size:0.82rem">${label}</span>
-          <div style="display:flex;gap:0.75rem;align-items:center">
-            ${rate ? `<span class="funnel-conv">${rate}</span>` : ""}
-            <span style="color:#e8eaf0;font-weight:700">${count}</span>
-          </div>
-        </div>`).join("");
+  if (!html) html = `<div style="color:#5a607a;text-align:center;padding:3rem">Keine Nachrichten geladen.<br>Überprüfe Notion-Verbindung.</div>`;
+  wrap.innerHTML = html;
+}
 
-      return `
-        <div>
-          <div class="stats-kampagne-title">${k.label}</div>
-          <div class="stats-kampagne-block">
-            <div class="stats-card">
-              <h3>📋 A/B Nutzung</h3>
-              ${abRows}
-            </div>
-            <div class="funnel-card">
-              <h3>🔽 Funnel (gesamt)</h3>
-              ${funnelRows}
-              <div style="margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid #252840;display:flex;justify-content:space-between;font-size:0.78rem">
-                <span style="color:#5a607a">Gesamt-Conv.</span>
-                <span style="color:#4fc97e;font-weight:700">${conv(c("kontaktanfrage"), c("erstgespraech"))}</span>
+function escHtml(str) {
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+async function copyMsg(btnId, kampagne, stage, variante, btn) {
+  const variants = (notionCache[kampagne] && notionCache[kampagne][stage]) || [];
+  const v = variants.find(x => x.variante === variante);
+  if (!v) return;
+
+  try { await navigator.clipboard.writeText(v.text); } catch(e) {
+    const ta = document.createElement("textarea");
+    ta.value = v.text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+  }
+
+  btn.textContent = "✅ Kopiert!";
+  btn.classList.add("copied");
+  setTimeout(() => { btn.textContent = "📋 Kopieren"; btn.classList.remove("copied"); }, 1800);
+
+  // Track in Supabase
+  const { error } = await db.from("message_uses").insert({ kampagne, stage, variante });
+  if (error) { console.error(error); return; }
+
+  // Update local count
+  const useKey = `${kampagne}_${stage}_${variante}`;
+  msgUses[useKey] = (msgUses[useKey] || 0) + 1;
+  const el = document.getElementById(`uses-${useKey}`);
+  if (el) el.textContent = msgUses[useKey] + "× verwendet";
+
+  // Refresh stats if visible
+  if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
+}
+
+// ══════════════════════════════════════════════
+// MSG USES (aggregate from Supabase)
+// ══════════════════════════════════════════════
+async function loadMsgUses() {
+  const { data, error } = await db.from("message_uses").select("kampagne,stage,variante");
+  if (error) { console.error(error); return; }
+  msgUses = {};
+  for (const row of data) {
+    const key = `${row.kampagne}_${row.stage}_${row.variante}`;
+    msgUses[key] = (msgUses[key] || 0) + 1;
+  }
+}
+
+// ══════════════════════════════════════════════
+// A/B STATS
+// ══════════════════════════════════════════════
+function renderStats() {
+  const wrap = document.getElementById("stats-wrap");
+  let html = "";
+
+  for (const kamp of KAMPAGNEN) {
+    html += `<div>`;
+    html += `<div class="stats-kampagne-title">${kamp.label}</div>`;
+    html += `<div class="stats-grid">`;
+
+    for (const st of MSG_STAGES) {
+      const a = msgUses[`${kamp.key}_${st.key}_a`] || 0;
+      const b = msgUses[`${kamp.key}_${st.key}_b`] || 0;
+      const total = a + b;
+      const barA = total > 0 ? Math.round(a/total*100) : 0;
+      const barB = total > 0 ? Math.round(b/total*100) : 0;
+
+      html += `
+        <div class="stats-card">
+          <h3 style="color:${st.accent}">${st.label}</h3>
+          ${total === 0
+            ? `<div class="ab-empty">Noch keine Nutzung erfasst</div>`
+            : `<div class="ab-stat-row">
+                <span class="ab-stat-label">Verteilung</span>
+                <div class="ab-bar-wrap">
+                  <div class="ab-bar bar-a" style="width:${barA}%"></div>
+                  <div class="ab-bar bar-b" style="width:${barB}%"></div>
+                </div>
+                <div class="ab-counts">
+                  <span class="ab-count-a">A: ${a}</span>
+                  <span class="ab-count-b">B: ${b}</span>
+                </div>
               </div>
-            </div>
-          </div>
+              <div class="ab-stat-row">
+                <span class="ab-stat-label">Gesamt</span>
+                <span style="font-size:0.82rem;color:#9aa0b4;font-weight:700">${total}</span>
+              </div>`
+          }
         </div>`;
-    }).join("");
+    }
+    html += `</div></div>`;
   }
 
-  // ══════════════════════════════════════════════════════
-  // TABS
-  // ══════════════════════════════════════════════════════
-  function switchTab(tab, btn) {
-    document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
-    document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
-    document.getElementById(`tab-${tab}`).classList.add("active");
-    if (btn) btn.classList.add("active");
-    if (tab === "stats") renderABStats();
-  }
+  wrap.innerHTML = html;
+}
 
-  // ══════════════════════════════════════════════════════
-  // INIT
-  // ══════════════════════════════════════════════════════
-  (async () => {
-    renderCards();
-    await loadCounts();
-    subscribeRealtime();
-    await loadNotionMessages();
-    await loadMessageUseCounts();
-    renderMessages(currentKampagne, currentStage);
-  })();
+// ══════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  btn.classList.add("active");
+  if (name === "stats") renderStats();
+}
+
+// ══════════════════════════════════════════════
+// REALTIME
+// ══════════════════════════════════════════════
+function setupRealtime() {
+  db.channel("outreach")
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "counter_events" }, payload => {
+      const { stage, delta } = payload.new;
+      if (!state[stage]) return;
+      state[stage].count = Math.max(0, state[stage].count + delta);
+      state[stage].lastClick = payload.new.created_at;
+      updateAllCounterUI();
+    })
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_uses" }, payload => {
+      const { kampagne, stage, variante } = payload.new;
+      const key = `${kampagne}_${stage}_${variante}`;
+      msgUses[key] = (msgUses[key] || 0) + 1;
+      const el = document.getElementById(`uses-${key}`);
+      if (el) el.textContent = msgUses[key] + "× verwendet";
+    })
+    .subscribe();
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+(async () => {
+  renderCards();
+  await loadCounterState();
+  await loadMsgUses();
+  await loadMessages();
+  setupRealtime();
+  document.getElementById("sync-status").textContent = "✅ Bereit";
+})();
 </script>
 </body>
 </html>
