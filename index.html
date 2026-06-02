@@ -490,27 +490,16 @@
     }
   }
 
-  // Mini-Counter aus Nachrichten-Tab — schreibt auch message_uses
-  async function msgHandleClick(stageKey, delta, cardId, kampagne, stage, variante) {
+  // Mini-Counter aus Nachrichten-Tab — NUR Counter erhöhen, KEIN message_uses Tracking
+  // A/B Tracking passiert ausschließlich über den Kopieren-Button
+  async function msgHandleClick(stageKey, delta, cardId) {
     if (delta < 0 && state[stageKey].count <= 0) return;
     // Buttons im Nachrichts-Card kurz sperren
     const card = document.getElementById(cardId);
     if (card) card.querySelectorAll("button").forEach(b => b.disabled = true);
 
-    // 1. Counter erhöhen
+    // Nur Counter erhöhen – kein A/B Tracking hier
     await handleClick(stageKey, delta, true);
-
-    // 2. message_uses tracken (nur bei positiven Deltas sinnvoll)
-    if (delta > 0 && kampagne && stage && variante) {
-      await db.from(MESSAGES_TABLE).insert({
-        kampagne, stage, variante,
-        source: /iPhone|iPad|iPod/.test(navigator.userAgent) ? "ios" : "mac",
-      });
-      const useKey = `${kampagne}__${stage}__${variante}`;
-      msgUseCounts[useKey] = (msgUseCounts[useKey] || 0) + delta;
-      const el = document.getElementById(`usecount-${useKey}`);
-      if (el) el.textContent = `${msgUseCounts[useKey]}× kopiert`;
-    }
 
     // Freischalten kommt über Realtime
   }
@@ -660,9 +649,9 @@
             </button>
           </div>
           <div class="msg-actions">
-            <button class="msg-minus-btn" onclick="msgHandleClick('${stageKey}', -1, '${cardId}', '${kampagne}', '${stage}', '${variante}')">−1</button>
-            <button class="msg-plus-btn"  onclick="msgHandleClick('${stageKey}',  1, '${cardId}', '${kampagne}', '${stage}', '${variante}')">+1</button>
-            <button class="msg-plus5-btn" onclick="msgHandleClick('${stageKey}',  5, '${cardId}', '${kampagne}', '${stage}', '${variante}')">+5</button>
+            <button class="msg-minus-btn" onclick="msgHandleClick('${stageKey}', -1, '${cardId}')">−1</button>
+            <button class="msg-plus-btn"  onclick="msgHandleClick('${stageKey}',  1, '${cardId}')">+1</button>
+            <button class="msg-plus5-btn" onclick="msgHandleClick('${stageKey}',  5, '${cardId}')">+5</button>
             <div class="stage-counter-badge">
               ${MSG_STAGE_LABELS[stage]}: <strong class="stage-badge-count" data-stage="${stageKey}">${currentCount}</strong>
             </div>
@@ -677,7 +666,7 @@
     btn.classList.add("copied");
     setTimeout(() => { btn.textContent = "📋 Kopieren + Zählen"; btn.classList.remove("copied"); }, 2000);
 
-    // 1. Nachrichtsnutzung tracken
+    // 1. Nachrichtsnutzung tracken (A/B Counter)
     await db.from(MESSAGES_TABLE).insert({
       kampagne, stage, variante,
       source: /iPhone|iPad|iPod/.test(navigator.userAgent) ? "ios" : "mac",
