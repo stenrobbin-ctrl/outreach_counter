@@ -9,10 +9,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #0f1117;
-      min-height: 100vh;
-      padding: 1.5rem 1rem 4rem;
-      color: #e8eaf0;
+      background: #0f1117; min-height: 100vh;
+      padding: 1.5rem 1rem 4rem; color: #e8eaf0;
     }
     header {
       max-width: 1300px; margin: 0 auto 1.5rem;
@@ -21,17 +19,15 @@
     header h1 { font-size: 1.4rem; color: #e8eaf0; }
     .header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
     .pill {
-      font-size: 0.75rem; color: #9aa0b4;
-      background: #1c1f2e; border: 1px solid #2a2f45;
+      font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e;
       border-radius: 20px; padding: 0.3rem 0.75rem;
-      cursor: pointer; transition: color 0.15s, border-color 0.15s; border: none;
+      cursor: pointer; transition: color 0.15s; border: none;
     }
     .pill:hover { color: #4f8ef7; }
     #sync-status {
       font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e;
       border-radius: 20px; padding: 0.3rem 0.75rem;
     }
-
     .tabs {
       max-width: 1300px; margin: 0 auto 2rem;
       display: flex; gap: 0.5rem; border-bottom: 1px solid #252840; padding-bottom: 0.75rem;
@@ -45,7 +41,6 @@
     .tab-btn:hover:not(.active) { color: #9aa0b4; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-
     .counter-layout {
       max-width: 1300px; margin: 0 auto;
       display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; align-items: start;
@@ -53,7 +48,6 @@
     @media (max-width: 900px) { .counter-layout { grid-template-columns: 1fr; } }
     .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     @media (max-width: 500px) { .counter-grid { grid-template-columns: 1fr; } }
-
     .card {
       background: #1c1f2e; border-radius: 14px; padding: 1.1rem 0.9rem 1rem;
       text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.35);
@@ -64,21 +58,11 @@
       content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       border-radius: 14px 14px 0 0; background: var(--accent, #4f8ef7);
     }
-    .stage-num {
-      font-size: 0.62rem; font-weight: 700; color: #444a66;
-      letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    .card h2 {
-      font-size: 0.78rem; color: #9aa0b4; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    .count {
-      font-size: 2.6rem; font-weight: 800; color: #e8eaf0;
-      line-height: 1; margin: 0.2rem 0;
-    }
+    .stage-num { font-size: 0.62rem; font-weight: 700; color: #444a66; letter-spacing: 0.08em; text-transform: uppercase; }
+    .card h2 { font-size: 0.78rem; color: #9aa0b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .count { font-size: 2.6rem; font-weight: 800; color: #e8eaf0; line-height: 1; margin: 0.2rem 0; }
     .last-click { font-size: 0.65rem; color: #444a66; min-height: 0.9em; }
     .btn-row { display: flex; gap: 0.4rem; width: 100%; margin-top: 0.2rem; }
-
     .minus-btn {
       background: #252840; color: #9aa0b4; border: none; border-radius: 8px;
       padding: 0.45rem 0.7rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
@@ -86,14 +70,12 @@
     }
     .minus-btn:hover { background: #c0392b22; color: #e05555; }
     .minus-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
     .plus-btn {
       background: var(--accent, #4f8ef7); color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0; font-size: 1rem; font-weight: 600; cursor: pointer; flex: 1;
       transition: filter 0.15s;
     }
     .plus-btn:hover { filter: brightness(1.2); }
-
     .plus5-btn {
       background: transparent; color: var(--accent, #4f8ef7);
       border: 2px solid var(--accent, #4f8ef7); border-radius: 8px;
@@ -101,18 +83,14 @@
       transition: background 0.15s, color 0.15s;
     }
     .plus5-btn:hover { background: var(--accent, #4f8ef7); color: #fff; }
-
     .sidebar {
       background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
       border: 1px solid #252840; position: sticky; top: 1.5rem;
     }
-    .sidebar h3 {
-      font-size: 0.8rem; color: #5a607a; text-transform: uppercase;
-      letter-spacing: 0.08em; margin-bottom: 1rem;
-    }
+    .sidebar h3 { font-size: 0.8rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
     .stat-row {
-      display: flex; justify-content: space-between;
-      padding: 0.5rem 0; border-bottom: 1px solid #252840; font-size: 0.82rem;
+      display: flex; justify-content: space-between; padding: 0.5rem 0;
+      border-bottom: 1px solid #252840; font-size: 0.82rem;
     }
     .stat-row:last-of-type { border-bottom: none; }
     .stat-label { color: #9aa0b4; }
@@ -122,52 +100,36 @@
       padding: 0.35rem 0; border-bottom: 1px solid #1a1d2e; color: #9aa0b4;
     }
     .conv-row span:last-child { color: #4fc97e; font-weight: 700; }
-
-    .footer-actions {
-      max-width: 1300px; margin: 1.5rem auto 0;
-      display: flex; justify-content: center;
-    }
+    .footer-actions { max-width: 1300px; margin: 1.5rem auto 0; display: flex; justify-content: center; }
     .reset-btn {
       background: transparent; color: #5a607a; border: 1px solid #2a2f45; border-radius: 8px;
       padding: 0.45rem 1.2rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
       transition: color 0.15s, border-color 0.15s;
     }
     .reset-btn:hover { color: #e05555; border-color: #e05555; }
-
     @keyframes pulse-ring {
       0%   { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
       70%  { box-shadow: 0 0 0 10px rgba(79,142,247,0); }
       100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
     }
     .card.pulse { animation: pulse-ring 0.5s ease-out; }
-
     .messages-wrap { max-width: 1300px; margin: 0 auto; }
     .kampagne-block { margin-bottom: 3rem; }
     .kampagne-title {
-      font-size: 0.72rem; color: #5a607a;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      margin-bottom: 1.25rem; padding-bottom: 0.5rem;
-      border-bottom: 1px solid #252840;
+      font-size: 0.72rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid #252840;
     }
     .stage-block { margin-bottom: 2rem; }
     .stage-title {
-      font-size: 1.36rem;
-      font-weight: 800;
-      color: #d4d8e5;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      letter-spacing: 0.01em;
+      font-size: 1.36rem; font-weight: 800; color: #d4d8e5;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.65rem;
     }
     .stage-title-dot {
       width: 10px; height: 10px; border-radius: 50%;
       background: var(--stage-accent, #4f8ef7); display: inline-block; flex-shrink: 0;
     }
-
     .ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 700px) { .ab-grid { grid-template-columns: 1fr; } }
-
     .msg-card {
       background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
       border: 1px solid #252840; display: flex; flex-direction: column; gap: 0.75rem;
@@ -179,31 +141,21 @@
     }
     .msg-card.variant-a::before { background: #4f8ef7; }
     .msg-card.variant-b::before { background: #a259f7; }
-
-    .msg-header {
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 0.5rem;
-    }
+    .msg-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     .variant-badge {
       font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
       text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px;
     }
     .msg-card.variant-a .variant-badge { background: #4f8ef722; color: #4f8ef7; }
     .msg-card.variant-b .variant-badge { background: #a259f722; color: #a259f7; }
-
     .use-count { font-size: 0.72rem; color: #444a66; }
     .fokus-tag { font-size: 0.7rem; color: #5a607a; font-style: italic; }
-
     .msg-text {
       font-size: 0.85rem; color: #9aa0b4; line-height: 1.6;
       background: #0f1117; border-radius: 8px; padding: 0.85rem;
       white-space: pre-wrap; flex: 1;
     }
-
-    .msg-actions {
-      display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
-    }
-
+    .msg-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
     .copy-btn {
       background: #4f8ef7; color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
@@ -212,68 +164,29 @@
     .msg-card.variant-b .copy-btn { background: #a259f7; }
     .copy-btn:hover { filter: brightness(1.15); }
     .copy-btn.copied { background: #27ae60 !important; }
-
     .msg-track-row {
-      display: flex;
-      gap: 0.45rem;
-      flex-wrap: wrap;
-      align-items: center;
+      display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;
     }
     .msg-track-btn {
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 0.48rem 0.8rem;
-      transition: transform 0.12s, filter 0.15s, background 0.15s;
+      border: none; border-radius: 8px; cursor: pointer;
+      font-weight: 700; font-size: 0.82rem; padding: 0.48rem 0.8rem;
+      transition: transform 0.12s, filter 0.15s;
     }
     .msg-track-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-    .msg-track-btn.minus {
-      background: #252840;
-      color: #d87b7b;
-      min-width: 58px;
-    }
-    .msg-track-btn.plus1 {
-      background: #22324f;
-      color: #7ab1ff;
-      min-width: 58px;
-    }
-    .msg-track-btn.plus5 {
-      background: transparent;
-      border: 2px solid currentColor;
-      color: #4fc97e;
-      min-width: 58px;
-    }
-    .msg-track-hint {
-      font-size: 0.72rem;
-      color: #5a607a;
-      margin-left: auto;
-    }
-
-    .stats-wrap {
-      max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem;
-    }
+    .msg-track-btn.minus { background: #252840; color: #d87b7b; min-width: 58px; }
+    .msg-track-btn.plus1 { background: #22324f; color: #7ab1ff; min-width: 58px; }
+    .msg-track-btn.plus5 { background: transparent; border: 2px solid #4fc97e; color: #4fc97e; min-width: 58px; }
+    .msg-track-hint { font-size: 0.72rem; color: #5a607a; margin-left: auto; }
+    .stats-wrap { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
     .stats-kampagne-title {
-      font-size: 0.72rem; color: #5a607a;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      margin-bottom: 1rem; padding-bottom: 0.5rem;
-      border-bottom: 1px solid #252840;
+      font-size: 0.72rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #252840;
     }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
-
-    .stats-card {
-      background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840;
-    }
-    .stats-card h3 {
-      font-size: 0.78rem; color: #5a607a; text-transform: uppercase;
-      letter-spacing: 0.08em; margin-bottom: 1rem;
-    }
-    .ab-stat-row {
-      display: flex; align-items: center; padding: 0.5rem 0;
-      border-bottom: 1px solid #1a1d2e; gap: 0.5rem;
-    }
+    .stats-card { background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840; }
+    .stats-card h3 { font-size: 0.78rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .ab-stat-row { display: flex; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d2e; gap: 0.5rem; }
     .ab-stat-row:last-child { border-bottom: none; }
     .ab-stat-label { font-size: 0.78rem; color: #9aa0b4; min-width: 140px; }
     .ab-bar-wrap { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
@@ -333,30 +246,34 @@
 </div>
 
 <script>
-const SUPABASE_URL   = "https://wvfooydrjkcoamohylch.supabase.co";
-const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
-const NOTION_PROXY   = "https://linkedin-dashboard.stenrobbin.workers.dev/";
-const NOTION_DB_ID   = "99f511e015ca82538b2b81cc51b56ef8";
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const SUPABASE_URL = "https://wvfooydrjkcoamohylch.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
+const NOTION_PROXY = "https://linkedin-dashboard.stenrobbin.workers.dev/";
+const NOTION_DB_ID = "99f511e015ca82538b2b81cc51b56ef8";
+
+// Eindeutige Session-ID — verhindert Doppelzählung durch eigene Realtime-Events
+const SESSION_ID = Math.random().toString(36).slice(2);
 
 const STAGES = [
-  { key: "kontaktanfrage",    label: "Kontaktanfrage",    accent: "#4f8ef7" },
-  { key: "vernetzt",          label: "Vernetzt",           accent: "#5b8dee" },
-  { key: "dm1",               label: "DM 1",               accent: "#7c6ff7" },
-  { key: "pitch",             label: "Pitch",              accent: "#a259f7" },
-  { key: "follow_up",         label: "Follow-up",          accent: "#f7925a" },
-  { key: "einwandbehandlung", label: "Einwandbehandlung",  accent: "#f75a5a" },
-  { key: "positive_antwort",  label: "Positive Antwort",   accent: "#4fc97e" },
-  { key: "erstgespraech",     label: "Erstgespräch",       accent: "#27ae60" },
+  { key: "kontaktanfrage",    label: "Kontaktanfrage",   accent: "#4f8ef7" },
+  { key: "vernetzt",          label: "Vernetzt",          accent: "#5b8dee" },
+  { key: "dm1",               label: "DM 1",              accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",             accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",         accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung", accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",  accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",      accent: "#27ae60" },
 ];
 const STAGES_PLUS5 = ["kontaktanfrage","vernetzt","dm1","pitch"];
 
 const MSG_STAGES = [
-  { key: "dm1",               label: "DM 1",               accent: "#7c6ff7" },
-  { key: "pitch",             label: "Pitch",              accent: "#a259f7" },
-  { key: "follow_up",         label: "Follow-up",          accent: "#f7925a" },
-  { key: "einwandbehandlung", label: "Einwandbehandlung",  accent: "#f75a5a" },
-  { key: "positive_antwort",  label: "Positive Antwort",   accent: "#4fc97e" },
-  { key: "erstgespraech",     label: "Erstgespräch",       accent: "#27ae60" },
+  { key: "dm1",               label: "DM 1",              accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",             accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",         accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung", accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",  accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",      accent: "#27ae60" },
 ];
 
 const KAMPAGNEN = [
@@ -364,15 +281,18 @@ const KAMPAGNEN = [
   { key: "support", label: "Support & FAQ" },
 ];
 
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// ─── STATE ────────────────────────────────────────────────────────────────────
 const state = {};
 STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
 
-let msgUses = {};
-let notionCache = {};
+let msgUses = {};       // { "kampagne_stage_variante": count }
+let notionCache = {};   // { kampagne: { stage: [{ variante, text, fokus }] } }
 
+// ─── COUNTER TAB ─────────────────────────────────────────────────────────────
 function renderCards() {
   document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => {
     const p5 = STAGES_PLUS5.includes(s.key);
@@ -395,17 +315,13 @@ async function loadCounterState() {
   const { data, error } = await db
     .from("counter_events")
     .select("stage, delta, created_at")
-    .order("created_at", { ascending: false });
-
+    .order("created_at", { ascending: true });
   if (error) { console.error(error); return; }
-
   STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
-
-  for (const row of [...data].reverse()) {
+  for (const row of data) {
     const s = state[row.stage];
     if (!s) continue;
-    s.count += row.delta;
-    if (s.count < 0) s.count = 0;
+    s.count = Math.max(0, s.count + row.delta);
     s.lastClick = row.created_at;
   }
   updateAllCounterUI();
@@ -431,19 +347,17 @@ async function handleClick(key, delta) {
   const newCount = s.count + delta;
   if (newCount < 0) return;
 
+  // Sofort lokal updaten
   s.count = newCount;
   s.lastClick = new Date().toISOString();
   updateAllCounterUI();
 
   const card = document.getElementById(`card-${key}`);
-  if (card) {
-    card.classList.remove("pulse");
-    void card.offsetWidth;
-    card.classList.add("pulse");
-  }
+  if (card) { card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse"); }
 
-  const { error } = await db.from("counter_events").insert({ stage: key, delta });
-  if (error) console.error("Insert error:", error);
+  // session_id mitspeichern → Realtime-Listener ignoriert eigene Events
+  const { error } = await db.from("counter_events").insert({ stage: key, delta, session_id: SESSION_ID });
+  if (error) console.error("Counter insert error:", error);
 }
 
 function renderSidebar() {
@@ -455,19 +369,21 @@ function renderSidebar() {
   const vern  = state["vernetzt"].count;
 
   document.getElementById("stats-total").innerHTML = STAGES.map(s =>
-    `<div class="stat-row"><span class="stat-label">${s.label}</span><span class="stat-accent" style="color:${s.accent}">${state[s.key].count}</span></div>`
+    `<div class="stat-row">
+       <span class="stat-label">${s.label}</span>
+       <span class="stat-accent" style="color:${s.accent}">${state[s.key].count}</span>
+     </div>`
   ).join("");
 
   const convs = [
     ["Anfrage → Vernetzt", kont, vern],
-    ["Vernetzt → DM 1", vern, dm1],
-    ["DM 1 → Pitch", dm1, pitch],
-    ["Pitch → Positiv", pitch, pos],
-    ["Positiv → Gespräch", pos, erst],
+    ["Vernetzt → DM 1",    vern, dm1],
+    ["DM 1 → Pitch",       dm1,  pitch],
+    ["Pitch → Positiv",    pitch, pos],
+    ["Positiv → Gespräch", pos,   erst],
   ];
-
   document.getElementById("stats-conv").innerHTML = convs.map(([lbl,a,b]) => {
-    const pct = a > 0 ? Math.round(b / a * 100) : 0;
+    const pct = a > 0 ? Math.round(b/a*100) : 0;
     return `<div class="conv-row"><span>${lbl}</span><span>${pct}%</span></div>`;
   }).join("");
 }
@@ -489,120 +405,102 @@ function exportJSON() {
   a.click();
 }
 
+// ─── NOTION HELPERS ───────────────────────────────────────────────────────────
 function getText(prop) {
   if (!prop) return "";
-  if (prop.type === "title" && prop.title) return prop.title.map(t => t.plain_text).join("");
+  if (prop.type === "title"     && prop.title)     return prop.title.map(t => t.plain_text).join("");
   if (prop.type === "rich_text" && prop.rich_text) return prop.rich_text.map(t => t.plain_text).join("");
-  if (prop.type === "select" && prop.select) return prop.select.name || "";
+  if (prop.type === "select"    && prop.select)    return prop.select.name || "";
   return "";
 }
-
 function getCheckbox(prop) {
   if (!prop) return null;
-  if (prop.type === "checkbox") return !!prop.checkbox;
-  return null;
+  return prop.type === "checkbox" ? !!prop.checkbox : null;
+}
+function normalizeKey(v) {
+  return String(v||"").trim().toLowerCase().replace(/\s+/g,"_");
+}
+function normalizeStage(v) {
+  return String(v||"").trim().toLowerCase()
+    .replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss")
+    .replace(/\s+/g,"_");
+}
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-function normalizeKey(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "_");
-}
-
-function normalizeStage(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .replace(/ä/g, "ae")
-    .replace(/ö/g, "oe")
-    .replace(/ü/g, "ue")
-    .replace(/ß/g, "ss")
-    .replace(/\s+/g, "_");
-}
-
+// ─── NOTION LOAD ──────────────────────────────────────────────────────────────
 async function loadMessages() {
   const status = document.getElementById("sync-status");
   status.textContent = "🔄 Lade…";
-
   try {
-    const res = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
+    const res  = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
     const json = await res.json();
     const results = json.results || [];
-
     notionCache = {};
-    let activeCount = 0;
-
+    let count = 0;
     for (const page of results) {
       const p = page.properties || {};
-
       const kampagneRaw = getText(p.kampagne) || getText(p.Kampagne) || "leadgen";
-      const stageRaw    = getText(p.stage) || getText(p.Stage) || "dm1";
+      const stageRaw    = getText(p.stage)    || getText(p.Stage)    || "dm1";
       const varianteRaw = getText(p.variante) || getText(p.Variante) || "A";
-      const textRaw     = getText(p.text) || getText(p.Text) || getText(p.nachricht) || getText(p.Nachricht) || "";
-      const fokus       = getText(p.fokus) || getText(p.Fokus) || "";
+      const textRaw     = getText(p.text)     || getText(p.Text)     || getText(p.nachricht) || getText(p.Nachricht) || "";
+      const fokus       = getText(p.fokus)    || getText(p.Fokus)    || "";
       const aktivRaw    = getCheckbox(p.aktiv) ?? getCheckbox(p.Aktiv);
-
-      const kampagne = normalizeKey(kampagneRaw);
-      const stage = normalizeStage(stageRaw);
-      const variante = String(varianteRaw || "A").trim().toLowerCase();
-      const nachricht = String(textRaw || "").trim();
-
-      if (!nachricht) continue;
-      if (aktivRaw === false) continue;
-      if (!KAMPAGNEN.some(k => k.key === kampagne)) continue;
-      if (!MSG_STAGES.some(s => s.key === stage)) continue;
-      if (!["a", "b"].includes(variante)) continue;
-
-      if (!notionCache[kampagne]) notionCache[kampagne] = {};
+      const kampagne  = normalizeKey(kampagneRaw);
+      const stage     = normalizeStage(stageRaw);
+      const variante  = String(varianteRaw||"A").trim().toLowerCase();
+      const nachricht = String(textRaw||"").trim();
+      if (!nachricht)                                 continue;
+      if (aktivRaw === false)                         continue;
+      if (!KAMPAGNEN.some(k => k.key === kampagne))   continue;
+      if (!MSG_STAGES.some(s => s.key === stage))     continue;
+      if (!["a","b"].includes(variante))              continue;
+      if (!notionCache[kampagne])        notionCache[kampagne] = {};
       if (!notionCache[kampagne][stage]) notionCache[kampagne][stage] = [];
-
       notionCache[kampagne][stage].push({ variante, text: nachricht, fokus });
-      activeCount++;
+      count++;
     }
-
-    Object.keys(notionCache).forEach(kampagne => {
-      Object.keys(notionCache[kampagne]).forEach(stage => {
-        notionCache[kampagne][stage].sort((a, b) => a.variante.localeCompare(b.variante));
-      });
-    });
-
-    status.textContent = `✅ ${activeCount} Nachrichten`;
-  } catch (e) {
+    Object.keys(notionCache).forEach(k =>
+      Object.keys(notionCache[k]).forEach(s =>
+        notionCache[k][s].sort((a,b) => a.variante.localeCompare(b.variante))
+      )
+    );
+    status.textContent = `✅ ${count} Nachrichten`;
+  } catch(e) {
     console.error(e);
     status.textContent = "❌ Fehler";
   }
-
   renderMessagesFlat();
 }
 
 async function reloadMessages() {
   await loadMessages();
   await loadMsgUses();
+  renderMessagesFlat();
   renderStats();
 }
 
+// ─── MESSAGES RENDER ──────────────────────────────────────────────────────────
 function renderMessagesFlat() {
   const wrap = document.getElementById("messages-wrap");
   let html = "";
-
   for (const kamp of KAMPAGNEN) {
     let kampHtml = "";
-
     for (const st of MSG_STAGES) {
-      const variants = (notionCache[kamp.key] && notionCache[kamp.key][st.key]) || [];
-      if (variants.length === 0) continue;
-
-      kampHtml += `<div class="stage-block">`;
-      kampHtml += `<div class="stage-title" style="--stage-accent:${st.accent}"><span class="stage-title-dot"></span>${st.label}</div>`;
-      kampHtml += `<div class="ab-grid">`;
-
+      const variants = notionCache[kamp.key]?.[st.key] || [];
+      if (!variants.length) continue;
+      kampHtml += `<div class="stage-block">
+        <div class="stage-title" style="--stage-accent:${st.accent}">
+          <span class="stage-title-dot"></span>${st.label}
+        </div>
+        <div class="ab-grid">`;
       for (const v of variants) {
-        const vClass = v.variante === "b" ? "variant-b" : "variant-a";
-        const useKey = `${kamp.key}_${st.key}_${v.variante}`;
-        const uses = msgUses[useKey] || 0;
-        const btnId = `copy-${kamp.key}-${st.key}-${v.variante}-${Math.random().toString(36).slice(2,6)}`;
-
+        const vClass  = v.variante === "b" ? "variant-b" : "variant-a";
+        const useKey  = `${kamp.key}_${st.key}_${v.variante}`;
+        const uses    = msgUses[useKey] || 0;
+        const uid     = Math.random().toString(36).slice(2,7);
+        const btnId   = `copy-${uid}`;
         kampHtml += `
           <div class="msg-card ${vClass}">
             <div class="msg-header">
@@ -612,121 +510,95 @@ function renderMessagesFlat() {
             ${v.fokus ? `<div class="fokus-tag">${escHtml(v.fokus)}</div>` : ""}
             <div class="msg-text">${escHtml(v.text)}</div>
             <div class="msg-actions">
-              <button class="copy-btn" id="${btnId}" onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
+              <button class="copy-btn" id="${btnId}"
+                onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
                 📋 Kopieren
               </button>
             </div>
             <div class="msg-track-row">
-              <button class="msg-track-btn minus" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',-1)">−1</button>
-              <button class="msg-track-btn plus1" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',1)">+1</button>
-              <button class="msg-track-btn plus5" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',5)">+5</button>
-              <span class="msg-track-hint">Counter + A/B Tracking</span>
+              <button class="msg-track-btn minus"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',-1)">−1</button>
+              <button class="msg-track-btn plus1"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',1)">+1</button>
+              <button class="msg-track-btn plus5"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',5)">+5</button>
+              <span class="msg-track-hint">Counter + A/B</span>
             </div>
           </div>`;
       }
-
       kampHtml += `</div></div>`;
     }
-
-    if (kampHtml) {
-      html += `<div class="kampagne-block"><div class="kampagne-title">${kamp.label}</div>${kampHtml}</div>`;
-    }
+    if (kampHtml) html += `<div class="kampagne-block"><div class="kampagne-title">${kamp.label}</div>${kampHtml}</div>`;
   }
-
-  if (!html) {
-    html = `<div style="color:#5a607a;text-align:center;padding:3rem">Keine Nachrichten geladen.<br>Prüfe die Notion-Properties <b>kampagne</b>, <b>stage</b>, <b>variante</b>, <b>text</b> und optional <b>aktiv</b>.</div>`;
-  }
-
+  if (!html) html = `<div style="color:#5a607a;text-align:center;padding:3rem">
+    Keine Nachrichten geladen.<br>
+    Prüfe Notion-Properties: <b>kampagne</b>, <b>stage</b>, <b>variante</b>, <b>text</b>, <b>aktiv</b>.
+  </div>`;
   wrap.innerHTML = html;
 }
 
-function escHtml(str) {
-  return String(str)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
-}
-
+// ─── COPY ─────────────────────────────────────────────────────────────────────
 async function copyMsg(btnId, kampagne, stage, variante, btn) {
-  const variants = (notionCache[kampagne] && notionCache[kampagne][stage]) || [];
-  const v = variants.find(x => x.variante === variante);
+  const v = notionCache[kampagne]?.[stage]?.find(x => x.variante === variante);
   if (!v) return;
-
   try {
     await navigator.clipboard.writeText(v.text);
-  } catch(e) {
+  } catch {
     const ta = document.createElement("textarea");
-    ta.value = v.text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    document.body.removeChild(ta);
+    ta.value = v.text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
   }
-
   btn.textContent = "✅ Kopiert!";
   btn.classList.add("copied");
-  setTimeout(() => {
-    btn.textContent = "📋 Kopieren";
-    btn.classList.remove("copied");
-  }, 1800);
+  setTimeout(() => { btn.textContent = "📋 Kopieren"; btn.classList.remove("copied"); }, 1800);
 
-  await addMessageUse(kampagne, stage, variante);
+  // Nur message_uses tracken — kein Counter-Increment beim Kopieren
+  await insertMsgUse(kampagne, stage, variante);
 }
 
-async function trackMessageAction(kampagne, stage, variante, delta) {
-  const stageState = state[stage];
-  if (!stageState) return;
-
-  const newCount = stageState.count + delta;
+// ─── TRACK MSG ACTION (Counter + A/B) ─────────────────────────────────────────
+async function trackMsgAction(kampagne, stage, variante, delta) {
+  // 1. Counter lokal updaten
+  const s = state[stage];
+  if (!s) return;
+  const newCount = s.count + delta;
   if (newCount < 0) return;
-
-  stageState.count = newCount;
-  stageState.lastClick = new Date().toISOString();
+  s.count = newCount;
+  s.lastClick = new Date().toISOString();
   updateAllCounterUI();
 
   const card = document.getElementById(`card-${stage}`);
-  if (card) {
-    card.classList.remove("pulse");
-    void card.offsetWidth;
-    card.classList.add("pulse");
-  }
+  if (card) { card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse"); }
 
-  const counterInsert = db.from("counter_events").insert({ stage, delta });
-  const usageInsert = db.from("message_uses").insert({ kampagne, stage, variante });
+  // 2. Counter in DB mit session_id
+  const { error: ce } = await db.from("counter_events").insert({ stage, delta, session_id: SESSION_ID });
+  if (ce) console.error("Counter insert error:", ce);
 
-  const [{ error: counterError }, { error: usageError }] = await Promise.all([counterInsert, usageInsert]);
-
-  if (counterError) console.error("Counter insert error:", counterError);
-  if (usageError) console.error("Message use insert error:", usageError);
-
-  if (!usageError) {
-    const useKey = `${kampagne}_${stage}_${variante}`;
-    msgUses[useKey] = (msgUses[useKey] || 0) + 1;
-    const el = document.getElementById(`uses-${useKey}`);
-    if (el) el.textContent = msgUses[useKey] + "× verwendet";
-    if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
+  // 3. message_uses nur für delta > 0 tracken (Nutzung, kein Abzug)
+  if (delta > 0) {
+    for (let i = 0; i < delta; i++) {
+      await insertMsgUse(kampagne, stage, variante);
+    }
   }
 }
 
-async function addMessageUse(kampagne, stage, variante) {
-  const { error } = await db.from("message_uses").insert({ kampagne, stage, variante });
-  if (error) {
-    console.error(error);
-    return;
-  }
+// ─── MSG USE INSERT & LOCAL UPDATE ───────────────────────────────────────────
+async function insertMsgUse(kampagne, stage, variante) {
+  const { error } = await db.from("message_uses").insert({ kampagne, stage, variante, session_id: SESSION_ID });
+  if (error) { console.error("message_uses insert error:", error); return; }
 
+  // Lokal inkrementieren — Realtime ignoriert eigene session
   const useKey = `${kampagne}_${stage}_${variante}`;
   msgUses[useKey] = (msgUses[useKey] || 0) + 1;
   const el = document.getElementById(`uses-${useKey}`);
   if (el) el.textContent = msgUses[useKey] + "× verwendet";
-
   if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
 }
 
+// ─── MSG USES LOAD ────────────────────────────────────────────────────────────
 async function loadMsgUses() {
   const { data, error } = await db.from("message_uses").select("kampagne,stage,variante");
   if (error) { console.error(error); return; }
-
   msgUses = {};
   for (const row of data) {
     const key = `${row.kampagne}_${row.stage}_${row.variante}`;
@@ -734,20 +606,18 @@ async function loadMsgUses() {
   }
 }
 
+// ─── A/B STATS ────────────────────────────────────────────────────────────────
 function renderStats() {
   const wrap = document.getElementById("stats-wrap");
   let html = "";
-
   for (const kamp of KAMPAGNEN) {
     html += `<div><div class="stats-kampagne-title">${kamp.label}</div><div class="stats-grid">`;
-
     for (const st of MSG_STAGES) {
       const a = msgUses[`${kamp.key}_${st.key}_a`] || 0;
       const b = msgUses[`${kamp.key}_${st.key}_b`] || 0;
       const total = a + b;
-      const barA = total > 0 ? Math.round(a / total * 100) : 0;
-      const barB = total > 0 ? Math.round(b / total * 100) : 0;
-
+      const barA = total > 0 ? Math.round(a/total*100) : 0;
+      const barB = total > 0 ? Math.round(b/total*100) : 0;
       html += `
         <div class="stats-card">
           <h3 style="color:${st.accent}">${st.label}</h3>
@@ -770,13 +640,12 @@ function renderStats() {
               </div>`}
         </div>`;
     }
-
     html += `</div></div>`;
   }
-
   wrap.innerHTML = html;
 }
 
+// ─── TABS ─────────────────────────────────────────────────────────────────────
 function switchTab(name, btn) {
   document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -785,9 +654,12 @@ function switchTab(name, btn) {
   if (name === "stats") renderStats();
 }
 
+// ─── REALTIME ── nur Events von ANDEREN Sessions verarbeiten ─────────────────
 function setupRealtime() {
   db.channel("outreach")
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "counter_events" }, payload => {
+      // Eigene Events bereits lokal verarbeitet — ignorieren
+      if (payload.new.session_id === SESSION_ID) return;
       const { stage, delta } = payload.new;
       if (!state[stage]) return;
       state[stage].count = Math.max(0, state[stage].count + delta);
@@ -795,6 +667,8 @@ function setupRealtime() {
       updateAllCounterUI();
     })
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_uses" }, payload => {
+      // Eigene Events bereits lokal verarbeitet — ignorieren
+      if (payload.new.session_id === SESSION_ID) return;
       const { kampagne, stage, variante } = payload.new;
       const key = `${kampagne}_${stage}_${variante}`;
       msgUses[key] = (msgUses[key] || 0) + 1;
@@ -805,6 +679,7 @@ function setupRealtime() {
     .subscribe();
 }
 
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 (async () => {
   renderCards();
   await loadCounterState();
