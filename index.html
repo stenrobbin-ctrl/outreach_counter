@@ -27,9 +27,11 @@
       cursor: pointer; transition: color 0.15s, border-color 0.15s; border: none;
     }
     .pill:hover { color: #4f8ef7; }
-    #sync-status { font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e; border-radius: 20px; padding: 0.3rem 0.75rem; }
+    #sync-status {
+      font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e;
+      border-radius: 20px; padding: 0.3rem 0.75rem;
+    }
 
-    /* TABS */
     .tabs {
       max-width: 1300px; margin: 0 auto 2rem;
       display: flex; gap: 0.5rem; border-bottom: 1px solid #252840; padding-bottom: 0.75rem;
@@ -44,7 +46,6 @@
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* ── COUNTER TAB ── */
     .counter-layout {
       max-width: 1300px; margin: 0 auto;
       display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; align-items: start;
@@ -63,9 +64,18 @@
       content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
       border-radius: 14px 14px 0 0; background: var(--accent, #4f8ef7);
     }
-    .stage-num { font-size: 0.62rem; font-weight: 700; color: #444a66; letter-spacing: 0.08em; text-transform: uppercase; }
-    .card h2 { font-size: 0.78rem; color: #9aa0b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-    .count { font-size: 2.6rem; font-weight: 800; color: #e8eaf0; line-height: 1; margin: 0.2rem 0; }
+    .stage-num {
+      font-size: 0.62rem; font-weight: 700; color: #444a66;
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .card h2 {
+      font-size: 0.78rem; color: #9aa0b4; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .count {
+      font-size: 2.6rem; font-weight: 800; color: #e8eaf0;
+      line-height: 1; margin: 0.2rem 0;
+    }
     .last-click { font-size: 0.65rem; color: #444a66; min-height: 0.9em; }
     .btn-row { display: flex; gap: 0.4rem; width: 100%; margin-top: 0.2rem; }
 
@@ -76,12 +86,14 @@
     }
     .minus-btn:hover { background: #c0392b22; color: #e05555; }
     .minus-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
     .plus-btn {
       background: var(--accent, #4f8ef7); color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0; font-size: 1rem; font-weight: 600; cursor: pointer; flex: 1;
       transition: filter 0.15s;
     }
     .plus-btn:hover { filter: brightness(1.2); }
+
     .plus5-btn {
       background: transparent; color: var(--accent, #4f8ef7);
       border: 2px solid var(--accent, #4f8ef7); border-radius: 8px;
@@ -94,15 +106,27 @@
       background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
       border: 1px solid #252840; position: sticky; top: 1.5rem;
     }
-    .sidebar h3 { font-size: 0.8rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
-    .stat-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #252840; font-size: 0.82rem; }
+    .sidebar h3 {
+      font-size: 0.8rem; color: #5a607a; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 1rem;
+    }
+    .stat-row {
+      display: flex; justify-content: space-between;
+      padding: 0.5rem 0; border-bottom: 1px solid #252840; font-size: 0.82rem;
+    }
     .stat-row:last-of-type { border-bottom: none; }
     .stat-label { color: #9aa0b4; }
     .stat-accent { font-weight: 700; }
-    .conv-row { display: flex; justify-content: space-between; font-size: 0.78rem; padding: 0.35rem 0; border-bottom: 1px solid #1a1d2e; color: #9aa0b4; }
+    .conv-row {
+      display: flex; justify-content: space-between; font-size: 0.78rem;
+      padding: 0.35rem 0; border-bottom: 1px solid #1a1d2e; color: #9aa0b4;
+    }
     .conv-row span:last-child { color: #4fc97e; font-weight: 700; }
 
-    .footer-actions { max-width: 1300px; margin: 1.5rem auto 0; display: flex; justify-content: center; }
+    .footer-actions {
+      max-width: 1300px; margin: 1.5rem auto 0;
+      display: flex; justify-content: center;
+    }
     .reset-btn {
       background: transparent; color: #5a607a; border: 1px solid #2a2f45; border-radius: 8px;
       padding: 0.45rem 1.2rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
@@ -117,7 +141,6 @@
     }
     .card.pulse { animation: pulse-ring 0.5s ease-out; }
 
-    /* ── MESSAGES TAB ── */
     .messages-wrap { max-width: 1300px; margin: 0 auto; }
     .kampagne-block { margin-bottom: 3rem; }
     .kampagne-title {
@@ -128,13 +151,20 @@
     }
     .stage-block { margin-bottom: 2rem; }
     .stage-title {
-      font-size: 0.82rem; font-weight: 700; color: #9aa0b4;
-      margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;
+      font-size: 1.36rem;
+      font-weight: 800;
+      color: #d4d8e5;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      letter-spacing: 0.01em;
     }
     .stage-title-dot {
-      width: 8px; height: 8px; border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--stage-accent, #4f8ef7); display: inline-block; flex-shrink: 0;
     }
+
     .ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     @media (max-width: 700px) { .ab-grid { grid-template-columns: 1fr; } }
 
@@ -150,33 +180,80 @@
     .msg-card.variant-a::before { background: #4f8ef7; }
     .msg-card.variant-b::before { background: #a259f7; }
 
-    .msg-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .msg-header {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
     .variant-badge {
       font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
       text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px;
     }
     .msg-card.variant-a .variant-badge { background: #4f8ef722; color: #4f8ef7; }
     .msg-card.variant-b .variant-badge { background: #a259f722; color: #a259f7; }
+
     .use-count { font-size: 0.72rem; color: #444a66; }
     .fokus-tag { font-size: 0.7rem; color: #5a607a; font-style: italic; }
+
     .msg-text {
       font-size: 0.85rem; color: #9aa0b4; line-height: 1.6;
       background: #0f1117; border-radius: 8px; padding: 0.85rem;
       white-space: pre-wrap; flex: 1;
     }
-    .msg-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+    .msg-actions {
+      display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+    }
 
     .copy-btn {
       background: #4f8ef7; color: #fff; border: none; border-radius: 8px;
       padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
-      transition: filter 0.15s; flex: 1; min-width: 80px;
+      transition: filter 0.15s; flex: 1; min-width: 110px;
     }
     .msg-card.variant-b .copy-btn { background: #a259f7; }
     .copy-btn:hover { filter: brightness(1.15); }
     .copy-btn.copied { background: #27ae60 !important; }
 
-    /* ── A/B STATS TAB ── */
-    .stats-wrap { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
+    .msg-track-row {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .msg-track-btn {
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 0.48rem 0.8rem;
+      transition: transform 0.12s, filter 0.15s, background 0.15s;
+    }
+    .msg-track-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .msg-track-btn.minus {
+      background: #252840;
+      color: #d87b7b;
+      min-width: 58px;
+    }
+    .msg-track-btn.plus1 {
+      background: #22324f;
+      color: #7ab1ff;
+      min-width: 58px;
+    }
+    .msg-track-btn.plus5 {
+      background: transparent;
+      border: 2px solid currentColor;
+      color: #4fc97e;
+      min-width: 58px;
+    }
+    .msg-track-hint {
+      font-size: 0.72rem;
+      color: #5a607a;
+      margin-left: auto;
+    }
+
+    .stats-wrap {
+      max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem;
+    }
     .stats-kampagne-title {
       font-size: 0.72rem; color: #5a607a;
       text-transform: uppercase; letter-spacing: 0.12em;
@@ -186,9 +263,17 @@
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
     @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
 
-    .stats-card { background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840; }
-    .stats-card h3 { font-size: 0.78rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
-    .ab-stat-row { display: flex; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d2e; gap: 0.5rem; }
+    .stats-card {
+      background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840;
+    }
+    .stats-card h3 {
+      font-size: 0.78rem; color: #5a607a; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 1rem;
+    }
+    .ab-stat-row {
+      display: flex; align-items: center; padding: 0.5rem 0;
+      border-bottom: 1px solid #1a1d2e; gap: 0.5rem;
+    }
     .ab-stat-row:last-child { border-bottom: none; }
     .ab-stat-label { font-size: 0.78rem; color: #9aa0b4; min-width: 140px; }
     .ab-bar-wrap { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
@@ -218,7 +303,6 @@
   <button class="tab-btn" onclick="switchTab('stats',this)">📈 A/B Stats</button>
 </div>
 
-<!-- Tab: Counter -->
 <div id="tab-counter" class="tab-content active">
   <div class="counter-layout">
     <div class="counter-grid" id="card-grid"></div>
@@ -236,14 +320,12 @@
   </div>
 </div>
 
-<!-- Tab: Nachrichten (flat scroll) -->
 <div id="tab-messages" class="tab-content">
   <div class="messages-wrap" id="messages-wrap">
     <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Nachrichten aus Notion…</div>
   </div>
 </div>
 
-<!-- Tab: A/B Stats -->
 <div id="tab-stats" class="tab-content">
   <div class="stats-wrap" id="stats-wrap">
     <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Statistiken…</div>
@@ -251,9 +333,6 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════════
 const SUPABASE_URL   = "https://wvfooydrjkcoamohylch.supabase.co";
 const SUPABASE_KEY   = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
 const NOTION_PROXY   = "https://linkedin-dashboard.stenrobbin.workers.dev/";
@@ -285,21 +364,13 @@ const KAMPAGNEN = [
   { key: "support", label: "Support & FAQ" },
 ];
 
-// ══════════════════════════════════════════════
-// SUPABASE
-// ══════════════════════════════════════════════
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ══════════════════════════════════════════════
-// COUNTER STATE
-// ══════════════════════════════════════════════
 const state = {};
 STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
 
-// message_uses aggregiert für UI: { kampagne_stage_variante: count }
 let msgUses = {};
-// Notion messages cache: { kampagne: { stage: [ {variante, text, fokus} ] } }
 let notionCache = {};
 
 function renderCards() {
@@ -313,7 +384,7 @@ function renderCards() {
         <div class="last-click" id="last-${s.key}"></div>
         <div class="btn-row">
           <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}',-1)">−1</button>
-          <button class="plus-btn"  onclick="handleClick('${s.key}',1)">+1</button>
+          <button class="plus-btn" onclick="handleClick('${s.key}',1)">+1</button>
           ${p5 ? `<button class="plus5-btn" onclick="handleClick('${s.key}',5)">+5</button>` : ""}
         </div>
       </div>`;
@@ -325,11 +396,11 @@ async function loadCounterState() {
     .from("counter_events")
     .select("stage, delta, created_at")
     .order("created_at", { ascending: false });
+
   if (error) { console.error(error); return; }
 
-  // Reset
   STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
-  // Aggregate
+
   for (const row of [...data].reverse()) {
     const s = state[row.stage];
     if (!s) continue;
@@ -347,7 +418,9 @@ function updateAllCounterUI() {
     if (minusBtn) minusBtn.disabled = state[s.key].count <= 0;
     const last = document.getElementById(`last-${s.key}`);
     if (last && state[s.key].lastClick) {
-      last.textContent = "zuletzt " + new Date(state[s.key].lastClick).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" });
+      last.textContent = "zuletzt " + new Date(state[s.key].lastClick).toLocaleTimeString("de-DE", {
+        hour: "2-digit", minute: "2-digit"
+      });
     }
   });
   renderSidebar();
@@ -363,21 +436,23 @@ async function handleClick(key, delta) {
   updateAllCounterUI();
 
   const card = document.getElementById(`card-${key}`);
-  card.classList.remove("pulse");
-  void card.offsetWidth;
-  card.classList.add("pulse");
+  if (card) {
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+  }
 
   const { error } = await db.from("counter_events").insert({ stage: key, delta });
   if (error) console.error("Insert error:", error);
 }
 
 function renderSidebar() {
-  const dm1  = state["dm1"].count;
+  const dm1   = state["dm1"].count;
   const pitch = state["pitch"].count;
-  const pos  = state["positive_antwort"].count;
-  const erst = state["erstgespraech"].count;
-  const kont = state["kontaktanfrage"].count;
-  const vern = state["vernetzt"].count;
+  const pos   = state["positive_antwort"].count;
+  const erst  = state["erstgespraech"].count;
+  const kont  = state["kontaktanfrage"].count;
+  const vern  = state["vernetzt"].count;
 
   document.getElementById("stats-total").innerHTML = STAGES.map(s =>
     `<div class="stat-row"><span class="stat-label">${s.label}</span><span class="stat-accent" style="color:${s.accent}">${state[s.key].count}</span></div>`
@@ -385,13 +460,14 @@ function renderSidebar() {
 
   const convs = [
     ["Anfrage → Vernetzt", kont, vern],
-    ["Vernetzt → DM 1",    vern, dm1],
-    ["DM 1 → Pitch",       dm1,  pitch],
-    ["Pitch → Positiv",    pitch, pos],
-    ["Positiv → Gespräch", pos,  erst],
+    ["Vernetzt → DM 1", vern, dm1],
+    ["DM 1 → Pitch", dm1, pitch],
+    ["Pitch → Positiv", pitch, pos],
+    ["Positiv → Gespräch", pos, erst],
   ];
+
   document.getElementById("stats-conv").innerHTML = convs.map(([lbl,a,b]) => {
-    const pct = a > 0 ? Math.round(b/a*100) : 0;
+    const pct = a > 0 ? Math.round(b / a * 100) : 0;
     return `<div class="conv-row"><span>${lbl}</span><span>${pct}%</span></div>`;
   }).join("");
 }
@@ -413,41 +489,6 @@ function exportJSON() {
   a.click();
 }
 
-// ══════════════════════════════════════════════
-// NOTION MESSAGES
-// ══════════════════════════════════════════════
-async function loadMessages() {
-  const status = document.getElementById("sync-status");
-  status.textContent = "🔄 Lade…";
-  try {
-    const res = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
-    const json = await res.json();
-    const results = json.results || [];
-
-    notionCache = {};
-    for (const page of results) {
-      const p = page.properties;
-      const kampagne  = getText(p.Kampagne)  || getText(p.kampagne)  || "leadgen";
-      const stage     = getText(p.Stage)     || getText(p.stage)     || "dm1";
-      const variante  = getText(p.Variante)  || getText(p.variante)  || "a";
-      const nachricht = getText(p.Nachricht) || getText(p.nachricht) || getText(p.Text) || "";
-      const fokus     = getText(p.Fokus)     || getText(p.fokus)     || "";
-      if (!nachricht) continue;
-      const k = kampagne.toLowerCase().replace(/[^a-z0-9_]/g,"_");
-      const st = stage.toLowerCase().replace(/[^a-z0-9_]/g,"_");
-      const v = variante.toLowerCase().trim();
-      if (!notionCache[k]) notionCache[k] = {};
-      if (!notionCache[k][st]) notionCache[k][st] = [];
-      notionCache[k][st].push({ variante: v, text: nachricht, fokus });
-    }
-    status.textContent = `✅ ${results.length} Nachrichten`;
-  } catch (e) {
-    console.error(e);
-    status.textContent = "❌ Fehler";
-  }
-  renderMessagesFlat();
-}
-
 function getText(prop) {
   if (!prop) return "";
   if (prop.type === "title" && prop.title) return prop.title.map(t => t.plain_text).join("");
@@ -456,60 +497,154 @@ function getText(prop) {
   return "";
 }
 
+function getCheckbox(prop) {
+  if (!prop) return null;
+  if (prop.type === "checkbox") return !!prop.checkbox;
+  return null;
+}
+
+function normalizeKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+}
+
+function normalizeStage(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/ß/g, "ss")
+    .replace(/\s+/g, "_");
+}
+
+async function loadMessages() {
+  const status = document.getElementById("sync-status");
+  status.textContent = "🔄 Lade…";
+
+  try {
+    const res = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
+    const json = await res.json();
+    const results = json.results || [];
+
+    notionCache = {};
+    let activeCount = 0;
+
+    for (const page of results) {
+      const p = page.properties || {};
+
+      const kampagneRaw = getText(p.kampagne) || getText(p.Kampagne) || "leadgen";
+      const stageRaw    = getText(p.stage) || getText(p.Stage) || "dm1";
+      const varianteRaw = getText(p.variante) || getText(p.Variante) || "A";
+      const textRaw     = getText(p.text) || getText(p.Text) || getText(p.nachricht) || getText(p.Nachricht) || "";
+      const fokus       = getText(p.fokus) || getText(p.Fokus) || "";
+      const aktivRaw    = getCheckbox(p.aktiv) ?? getCheckbox(p.Aktiv);
+
+      const kampagne = normalizeKey(kampagneRaw);
+      const stage = normalizeStage(stageRaw);
+      const variante = String(varianteRaw || "A").trim().toLowerCase();
+      const nachricht = String(textRaw || "").trim();
+
+      if (!nachricht) continue;
+      if (aktivRaw === false) continue;
+      if (!KAMPAGNEN.some(k => k.key === kampagne)) continue;
+      if (!MSG_STAGES.some(s => s.key === stage)) continue;
+      if (!["a", "b"].includes(variante)) continue;
+
+      if (!notionCache[kampagne]) notionCache[kampagne] = {};
+      if (!notionCache[kampagne][stage]) notionCache[kampagne][stage] = [];
+
+      notionCache[kampagne][stage].push({ variante, text: nachricht, fokus });
+      activeCount++;
+    }
+
+    Object.keys(notionCache).forEach(kampagne => {
+      Object.keys(notionCache[kampagne]).forEach(stage => {
+        notionCache[kampagne][stage].sort((a, b) => a.variante.localeCompare(b.variante));
+      });
+    });
+
+    status.textContent = `✅ ${activeCount} Nachrichten`;
+  } catch (e) {
+    console.error(e);
+    status.textContent = "❌ Fehler";
+  }
+
+  renderMessagesFlat();
+}
+
 async function reloadMessages() {
   await loadMessages();
   await loadMsgUses();
+  renderStats();
 }
 
-// ── Flat rendering ──────────────────────────────
 function renderMessagesFlat() {
   const wrap = document.getElementById("messages-wrap");
   let html = "";
 
   for (const kamp of KAMPAGNEN) {
-    html += `<div class="kampagne-block">`;
-    html += `<div class="kampagne-title">${kamp.label}</div>`;
+    let kampHtml = "";
 
     for (const st of MSG_STAGES) {
       const variants = (notionCache[kamp.key] && notionCache[kamp.key][st.key]) || [];
       if (variants.length === 0) continue;
 
-      html += `<div class="stage-block">`;
-      html += `<div class="stage-title" style="--stage-accent:${st.accent}"><span class="stage-title-dot"></span>${st.label}</div>`;
-      html += `<div class="ab-grid">`;
+      kampHtml += `<div class="stage-block">`;
+      kampHtml += `<div class="stage-title" style="--stage-accent:${st.accent}"><span class="stage-title-dot"></span>${st.label}</div>`;
+      kampHtml += `<div class="ab-grid">`;
 
       for (const v of variants) {
         const vClass = v.variante === "b" ? "variant-b" : "variant-a";
         const useKey = `${kamp.key}_${st.key}_${v.variante}`;
-        const uses   = msgUses[useKey] || 0;
-        const btnId  = `copy-${kamp.key}-${st.key}-${v.variante}-${Math.random().toString(36).slice(2,6)}`;
-        html += `
+        const uses = msgUses[useKey] || 0;
+        const btnId = `copy-${kamp.key}-${st.key}-${v.variante}-${Math.random().toString(36).slice(2,6)}`;
+
+        kampHtml += `
           <div class="msg-card ${vClass}">
             <div class="msg-header">
               <span class="variant-badge">Variante ${v.variante.toUpperCase()}</span>
               <span class="use-count" id="uses-${useKey}">${uses}× verwendet</span>
             </div>
-            ${v.fokus ? `<div class="fokus-tag">${v.fokus}</div>` : ""}
+            ${v.fokus ? `<div class="fokus-tag">${escHtml(v.fokus)}</div>` : ""}
             <div class="msg-text">${escHtml(v.text)}</div>
             <div class="msg-actions">
-              <button class="copy-btn" id="${btnId}"
-                onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
+              <button class="copy-btn" id="${btnId}" onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
                 📋 Kopieren
               </button>
             </div>
+            <div class="msg-track-row">
+              <button class="msg-track-btn minus" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',-1)">−1</button>
+              <button class="msg-track-btn plus1" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',1)">+1</button>
+              <button class="msg-track-btn plus5" onclick="trackMessageAction('${kamp.key}','${st.key}','${v.variante}',5)">+5</button>
+              <span class="msg-track-hint">Counter + A/B Tracking</span>
+            </div>
           </div>`;
       }
-      html += `</div></div>`; // ab-grid / stage-block
+
+      kampHtml += `</div></div>`;
     }
-    html += `</div>`; // kampagne-block
+
+    if (kampHtml) {
+      html += `<div class="kampagne-block"><div class="kampagne-title">${kamp.label}</div>${kampHtml}</div>`;
+    }
   }
 
-  if (!html) html = `<div style="color:#5a607a;text-align:center;padding:3rem">Keine Nachrichten geladen.<br>Überprüfe Notion-Verbindung.</div>`;
+  if (!html) {
+    html = `<div style="color:#5a607a;text-align:center;padding:3rem">Keine Nachrichten geladen.<br>Prüfe die Notion-Properties <b>kampagne</b>, <b>stage</b>, <b>variante</b>, <b>text</b> und optional <b>aktiv</b>.</div>`;
+  }
+
   wrap.innerHTML = html;
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 }
 
 async function copyMsg(btnId, kampagne, stage, variante, btn) {
@@ -517,36 +652,81 @@ async function copyMsg(btnId, kampagne, stage, variante, btn) {
   const v = variants.find(x => x.variante === variante);
   if (!v) return;
 
-  try { await navigator.clipboard.writeText(v.text); } catch(e) {
+  try {
+    await navigator.clipboard.writeText(v.text);
+  } catch(e) {
     const ta = document.createElement("textarea");
-    ta.value = v.text; document.body.appendChild(ta); ta.select();
-    document.execCommand("copy"); document.body.removeChild(ta);
+    ta.value = v.text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
   }
 
   btn.textContent = "✅ Kopiert!";
   btn.classList.add("copied");
-  setTimeout(() => { btn.textContent = "📋 Kopieren"; btn.classList.remove("copied"); }, 1800);
+  setTimeout(() => {
+    btn.textContent = "📋 Kopieren";
+    btn.classList.remove("copied");
+  }, 1800);
 
-  // Track in Supabase
+  await addMessageUse(kampagne, stage, variante);
+}
+
+async function trackMessageAction(kampagne, stage, variante, delta) {
+  const stageState = state[stage];
+  if (!stageState) return;
+
+  const newCount = stageState.count + delta;
+  if (newCount < 0) return;
+
+  stageState.count = newCount;
+  stageState.lastClick = new Date().toISOString();
+  updateAllCounterUI();
+
+  const card = document.getElementById(`card-${stage}`);
+  if (card) {
+    card.classList.remove("pulse");
+    void card.offsetWidth;
+    card.classList.add("pulse");
+  }
+
+  const counterInsert = db.from("counter_events").insert({ stage, delta });
+  const usageInsert = db.from("message_uses").insert({ kampagne, stage, variante });
+
+  const [{ error: counterError }, { error: usageError }] = await Promise.all([counterInsert, usageInsert]);
+
+  if (counterError) console.error("Counter insert error:", counterError);
+  if (usageError) console.error("Message use insert error:", usageError);
+
+  if (!usageError) {
+    const useKey = `${kampagne}_${stage}_${variante}`;
+    msgUses[useKey] = (msgUses[useKey] || 0) + 1;
+    const el = document.getElementById(`uses-${useKey}`);
+    if (el) el.textContent = msgUses[useKey] + "× verwendet";
+    if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
+  }
+}
+
+async function addMessageUse(kampagne, stage, variante) {
   const { error } = await db.from("message_uses").insert({ kampagne, stage, variante });
-  if (error) { console.error(error); return; }
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-  // Update local count
   const useKey = `${kampagne}_${stage}_${variante}`;
   msgUses[useKey] = (msgUses[useKey] || 0) + 1;
   const el = document.getElementById(`uses-${useKey}`);
   if (el) el.textContent = msgUses[useKey] + "× verwendet";
 
-  // Refresh stats if visible
   if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
 }
 
-// ══════════════════════════════════════════════
-// MSG USES (aggregate from Supabase)
-// ══════════════════════════════════════════════
 async function loadMsgUses() {
   const { data, error } = await db.from("message_uses").select("kampagne,stage,variante");
   if (error) { console.error(error); return; }
+
   msgUses = {};
   for (const row of data) {
     const key = `${row.kampagne}_${row.stage}_${row.variante}`;
@@ -554,24 +734,19 @@ async function loadMsgUses() {
   }
 }
 
-// ══════════════════════════════════════════════
-// A/B STATS
-// ══════════════════════════════════════════════
 function renderStats() {
   const wrap = document.getElementById("stats-wrap");
   let html = "";
 
   for (const kamp of KAMPAGNEN) {
-    html += `<div>`;
-    html += `<div class="stats-kampagne-title">${kamp.label}</div>`;
-    html += `<div class="stats-grid">`;
+    html += `<div><div class="stats-kampagne-title">${kamp.label}</div><div class="stats-grid">`;
 
     for (const st of MSG_STAGES) {
       const a = msgUses[`${kamp.key}_${st.key}_a`] || 0;
       const b = msgUses[`${kamp.key}_${st.key}_b`] || 0;
       const total = a + b;
-      const barA = total > 0 ? Math.round(a/total*100) : 0;
-      const barB = total > 0 ? Math.round(b/total*100) : 0;
+      const barA = total > 0 ? Math.round(a / total * 100) : 0;
+      const barB = total > 0 ? Math.round(b / total * 100) : 0;
 
       html += `
         <div class="stats-card">
@@ -592,19 +767,16 @@ function renderStats() {
               <div class="ab-stat-row">
                 <span class="ab-stat-label">Gesamt</span>
                 <span style="font-size:0.82rem;color:#9aa0b4;font-weight:700">${total}</span>
-              </div>`
-          }
+              </div>`}
         </div>`;
     }
+
     html += `</div></div>`;
   }
 
   wrap.innerHTML = html;
 }
 
-// ══════════════════════════════════════════════
-// TABS
-// ══════════════════════════════════════════════
 function switchTab(name, btn) {
   document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
   document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -613,9 +785,6 @@ function switchTab(name, btn) {
   if (name === "stats") renderStats();
 }
 
-// ══════════════════════════════════════════════
-// REALTIME
-// ══════════════════════════════════════════════
 function setupRealtime() {
   db.channel("outreach")
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "counter_events" }, payload => {
@@ -631,18 +800,17 @@ function setupRealtime() {
       msgUses[key] = (msgUses[key] || 0) + 1;
       const el = document.getElementById(`uses-${key}`);
       if (el) el.textContent = msgUses[key] + "× verwendet";
+      if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
     })
     .subscribe();
 }
 
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
 (async () => {
   renderCards();
   await loadCounterState();
   await loadMsgUses();
   await loadMessages();
+  renderStats();
   setupRealtime();
   document.getElementById("sync-status").textContent = "✅ Bereit";
 })();
