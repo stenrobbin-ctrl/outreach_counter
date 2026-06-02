@@ -490,13 +490,28 @@
     }
   }
 
-  // Mini-Counter aus Nachrichten-Tab
-  async function msgHandleClick(stageKey, delta, cardId) {
+  // Mini-Counter aus Nachrichten-Tab — schreibt auch message_uses
+  async function msgHandleClick(stageKey, delta, cardId, kampagne, stage, variante) {
     if (delta < 0 && state[stageKey].count <= 0) return;
     // Buttons im Nachrichts-Card kurz sperren
     const card = document.getElementById(cardId);
     if (card) card.querySelectorAll("button").forEach(b => b.disabled = true);
+
+    // 1. Counter erhöhen
     await handleClick(stageKey, delta, true);
+
+    // 2. message_uses tracken (nur bei positiven Deltas sinnvoll)
+    if (delta > 0 && kampagne && stage && variante) {
+      await db.from(MESSAGES_TABLE).insert({
+        kampagne, stage, variante,
+        source: /iPhone|iPad|iPod/.test(navigator.userAgent) ? "ios" : "mac",
+      });
+      const useKey = `${kampagne}__${stage}__${variante}`;
+      msgUseCounts[useKey] = (msgUseCounts[useKey] || 0) + delta;
+      const el = document.getElementById(`usecount-${useKey}`);
+      if (el) el.textContent = `${msgUseCounts[useKey]}× kopiert`;
+    }
+
     // Freischalten kommt über Realtime
   }
 
@@ -645,9 +660,9 @@
             </button>
           </div>
           <div class="msg-actions">
-            <button class="msg-minus-btn" onclick="msgHandleClick('${stageKey}', -1, '${cardId}')">−1</button>
-            <button class="msg-plus-btn"  onclick="msgHandleClick('${stageKey}',  1, '${cardId}')">+1</button>
-            <button class="msg-plus5-btn" onclick="msgHandleClick('${stageKey}',  5, '${cardId}')">+5</button>
+            <button class="msg-minus-btn" onclick="msgHandleClick('${stageKey}', -1, '${cardId}', '${kampagne}', '${stage}', '${variante}')">−1</button>
+            <button class="msg-plus-btn"  onclick="msgHandleClick('${stageKey}',  1, '${cardId}', '${kampagne}', '${stage}', '${variante}')">+1</button>
+            <button class="msg-plus5-btn" onclick="msgHandleClick('${stageKey}',  5, '${cardId}', '${kampagne}', '${stage}', '${variante}')">+5</button>
             <div class="stage-counter-badge">
               ${MSG_STAGE_LABELS[stage]}: <strong class="stage-badge-count" data-stage="${stageKey}">${currentCount}</strong>
             </div>
