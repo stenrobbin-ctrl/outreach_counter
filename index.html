@@ -1,730 +1,694 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>LinkedIn Outreach Counter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn Outreach</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{
-      --bg:#0f172a;--panel:#111827;--panel2:#1f2937;--muted:#94a3b8;--text:#e5e7eb;
-      --accent:#22c55e;--accent2:#60a5fa;--danger:#ef4444;--border:#334155;
-      --shadow:0 10px 30px rgba(0,0,0,.25);--radius:18px;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f1117; min-height: 100vh;
+      padding: 1.5rem 1rem 4rem; color: #e8eaf0;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:linear-gradient(180deg,#0b1220,#0f172a 35%,#111827);color:var(--text);min-height:100vh}
-    .wrap{max-width:1200px;margin:0 auto;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
-      padding:14px 16px;background:rgba(17,24,39,.8);backdrop-filter:blur(10px);
-      border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
-      position:sticky;top:12px;z-index:10}
-    .title{font-size:20px;font-weight:800}
-    .subtitle{color:var(--muted);font-size:13px;margin-top:2px}
-    .pill{padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:#0b1220;color:#cbd5e1;font-size:13px}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:16px}
-    .card{background:rgba(17,24,39,.88);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
-    .stats{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-    .stat{background:linear-gradient(180deg,rgba(31,41,55,.95),rgba(17,24,39,.95));border:1px solid var(--border);border-radius:16px;padding:16px}
-    .stat .label{color:var(--muted);font-size:13px;margin-bottom:8px}
-    .stat .value{font-size:34px;font-weight:800;line-height:1}
-    .stat .small{color:var(--muted);font-size:12px;margin-top:8px}
-
-    /* Tagesziel-Badges */
-    .goal-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;
-      font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:#0b1220}
-    .goal-badge.done{border-color:var(--accent);color:var(--accent)}
-    .goal-badge.partial{border-color:#f59e0b;color:#f59e0b}
-    .goal-badge.open{border-color:var(--border);color:var(--muted)}
-
-    .main{grid-column:span 8}
-    .side{grid-column:span 4}
-    .section-title{font-size:15px;font-weight:700;margin:0 0 12px 0;color:#f8fafc}
-    .controls{display:grid;gap:10px}
-    .row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .field{display:flex;flex-direction:column;gap:6px}
-    label{font-size:12px;color:var(--muted)}
-    select,input,textarea{width:100%;background:#0b1220;color:var(--text);border:1px solid var(--border);
-      border-radius:12px;padding:11px 12px;font-size:14px;outline:none;font-family:inherit}
-    textarea{resize:vertical;min-height:80px;line-height:1.5}
-    select:focus,input:focus,textarea:focus{border-color:#60a5fa;box-shadow:0 0 0 3px rgba(96,165,250,.15)}
-    .btnrow{display:flex;gap:10px;flex-wrap:wrap}
-    button{border:0;border-radius:14px;padding:12px 14px;font-weight:700;cursor:pointer;
-      transition:.15s transform,.15s opacity,.15s background}
-    button:active{transform:translateY(1px)}
-    .btn-primary{background:var(--accent);color:#052e16}
-    .btn-blue{background:var(--accent2);color:#07111f}
-    .btn-ghost{background:#223046;color:#e2e8f0;border:1px solid var(--border)}
-    .btn-danger{background:var(--danger);color:white}
-    .btn-sm{padding:7px 12px;font-size:13px;border-radius:10px}
-    .btn-save{background:#7c3aed;color:white}
-    .msg-list{display:grid;gap:10px}
-    .msg{border:1px solid var(--border);border-radius:14px;padding:12px;background:#0b1220}
-    .msghead{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
-    .msgmeta{font-size:12px;color:var(--muted)}
-    .msgtext{margin-top:8px;white-space:pre-wrap;line-height:1.4;color:#e2e8f0}
-    .msgbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-    .chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);color:#cbd5e1;background:#111827}
-    .muted{color:var(--muted)}
-    .bar{width:100%;height:12px;border-radius:999px;background:#0b1220;border:1px solid var(--border);overflow:hidden}
-    .bar > div{height:100%;background:linear-gradient(90deg,#22c55e,#60a5fa);width:0%;transition:width .3s}
-    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .tab{padding:10px 12px;border-radius:999px;border:1px solid var(--border);background:#0b1220;color:#cbd5e1;cursor:pointer}
-    .tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
-
-    /* Einwände */
-    .einwand-card{border:1px solid var(--border);border-radius:14px;padding:14px;background:#0b1220;display:grid;gap:10px}
-    .einwand-card .einwand-text{font-weight:700;color:#f8fafc;font-size:14px}
-    .einwand-card .antwort-text{color:#cbd5e1;font-size:13px;line-height:1.5;white-space:pre-wrap}
-    .einwand-edit{display:none;gap:10px;flex-direction:column;margin-top:8px}
-    .einwand-edit.open{display:flex}
-    .tag{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;
-      background:#1e3a5f;color:#60a5fa;border:1px solid #1d4ed8;margin-right:6px}
-
-    /* Vernetzungen quick-counter */
-    .quick-counters{grid-column:span 12;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    .qc-card{background:linear-gradient(180deg,rgba(31,41,55,.95),rgba(17,24,39,.95));
-      border:1px solid var(--border);border-radius:16px;padding:18px}
-    .qc-title{font-size:13px;color:var(--muted);margin-bottom:10px}
-    .qc-value{font-size:42px;font-weight:800;line-height:1}
-    .qc-goal{font-size:12px;color:var(--muted);margin-top:4px}
-    .qc-bar{width:100%;height:8px;border-radius:999px;background:#0b1220;border:1px solid var(--border);overflow:hidden;margin-top:8px}
-    .qc-bar > div{height:100%;border-radius:999px;transition:width .3s}
-    .qc-bar.vernetz > div{background:linear-gradient(90deg,#22c55e,#34d399)}
-    .qc-bar.dm1 > div{background:linear-gradient(90deg,#60a5fa,#818cf8)}
-    .qc-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-
-    @media(max-width:960px){
-      .main,.side{grid-column:span 12}
-      .stats{grid-template-columns:repeat(2,1fr)}
-      .row{grid-template-columns:1fr}
-      .quick-counters{grid-template-columns:1fr}
+    header {
+      max-width: 1300px; margin: 0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;
     }
+    header h1 { font-size: 1.4rem; color: #e8eaf0; }
+    .header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .pill {
+      font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e;
+      border-radius: 20px; padding: 0.3rem 0.75rem;
+      cursor: pointer; transition: color 0.15s; border: none;
+    }
+    .pill:hover { color: #4f8ef7; }
+    #sync-status {
+      font-size: 0.75rem; color: #9aa0b4; background: #1c1f2e;
+      border-radius: 20px; padding: 0.3rem 0.75rem;
+    }
+    .tabs {
+      max-width: 1300px; margin: 0 auto 2rem;
+      display: flex; gap: 0.5rem; border-bottom: 1px solid #252840; padding-bottom: 0.75rem;
+    }
+    .tab-btn {
+      background: none; border: none; color: #5a607a;
+      font-size: 0.9rem; font-weight: 600; padding: 0.4rem 1rem;
+      cursor: pointer; border-radius: 8px; transition: background 0.15s, color 0.15s;
+    }
+    .tab-btn.active { background: #1c1f2e; color: #e8eaf0; }
+    .tab-btn:hover:not(.active) { color: #9aa0b4; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .counter-layout {
+      max-width: 1300px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 280px; gap: 1.5rem; align-items: start;
+    }
+    @media (max-width: 900px) { .counter-layout { grid-template-columns: 1fr; } }
+    .counter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    @media (max-width: 500px) { .counter-grid { grid-template-columns: 1fr; } }
+    .card {
+      background: #1c1f2e; border-radius: 14px; padding: 1.1rem 0.9rem 1rem;
+      text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+      display: flex; flex-direction: column; align-items: center; gap: 0.35rem;
+      position: relative; border: 1px solid #252840;
+    }
+    .card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 14px 14px 0 0; background: var(--accent, #4f8ef7);
+    }
+    .stage-num { font-size: 0.62rem; font-weight: 700; color: #444a66; letter-spacing: 0.08em; text-transform: uppercase; }
+    .card h2 { font-size: 0.78rem; color: #9aa0b4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .count { font-size: 2.6rem; font-weight: 800; color: #e8eaf0; line-height: 1; margin: 0.2rem 0; }
+    .last-click { font-size: 0.65rem; color: #444a66; min-height: 0.9em; }
+    .btn-row { display: flex; gap: 0.4rem; width: 100%; margin-top: 0.2rem; }
+    .minus-btn {
+      background: #252840; color: #9aa0b4; border: none; border-radius: 8px;
+      padding: 0.45rem 0.7rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .minus-btn:hover { background: #c0392b22; color: #e05555; }
+    .minus-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .plus-btn {
+      background: var(--accent, #4f8ef7); color: #fff; border: none; border-radius: 8px;
+      padding: 0.45rem 0; font-size: 1rem; font-weight: 600; cursor: pointer; flex: 1;
+      transition: filter 0.15s;
+    }
+    .plus-btn:hover { filter: brightness(1.2); }
+    .plus5-btn {
+      background: transparent; color: var(--accent, #4f8ef7);
+      border: 2px solid var(--accent, #4f8ef7); border-radius: 8px;
+      padding: 0.45rem 0.6rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; flex-shrink: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .plus5-btn:hover { background: var(--accent, #4f8ef7); color: #fff; }
+    .sidebar {
+      background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
+      border: 1px solid #252840; position: sticky; top: 1.5rem;
+    }
+    .sidebar h3 { font-size: 0.8rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .stat-row {
+      display: flex; justify-content: space-between; padding: 0.5rem 0;
+      border-bottom: 1px solid #252840; font-size: 0.82rem;
+    }
+    .stat-row:last-of-type { border-bottom: none; }
+    .stat-label { color: #9aa0b4; }
+    .stat-accent { font-weight: 700; }
+    .conv-row {
+      display: flex; justify-content: space-between; font-size: 0.78rem;
+      padding: 0.35rem 0; border-bottom: 1px solid #1a1d2e; color: #9aa0b4;
+    }
+    .conv-row span:last-child { color: #4fc97e; font-weight: 700; }
+    .footer-actions { max-width: 1300px; margin: 1.5rem auto 0; display: flex; justify-content: center; }
+    .reset-btn {
+      background: transparent; color: #5a607a; border: 1px solid #2a2f45; border-radius: 8px;
+      padding: 0.45rem 1.2rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .reset-btn:hover { color: #e05555; border-color: #e05555; }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(79,142,247,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(79,142,247,0); }
+      100% { box-shadow: 0 0 0 0 rgba(79,142,247,0); }
+    }
+    .card.pulse { animation: pulse-ring 0.5s ease-out; }
+    .messages-wrap { max-width: 1300px; margin: 0 auto; }
+    .kampagne-block { margin-bottom: 3rem; }
+    .kampagne-title {
+      font-size: 0.72rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 1px solid #252840;
+    }
+    .stage-block { margin-bottom: 2rem; }
+    .stage-title {
+      font-size: 1.36rem; font-weight: 800; color: #d4d8e5;
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.65rem;
+    }
+    .stage-title-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--stage-accent, #4f8ef7); display: inline-block; flex-shrink: 0;
+    }
+    .ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 700px) { .ab-grid { grid-template-columns: 1fr; } }
+    .msg-card {
+      background: #1c1f2e; border-radius: 14px; padding: 1.25rem;
+      border: 1px solid #252840; display: flex; flex-direction: column; gap: 0.75rem;
+      position: relative;
+    }
+    .msg-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 14px 14px 0 0;
+    }
+    .msg-card.variant-a::before { background: #4f8ef7; }
+    .msg-card.variant-b::before { background: #a259f7; }
+    .msg-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .variant-badge {
+      font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px;
+    }
+    .msg-card.variant-a .variant-badge { background: #4f8ef722; color: #4f8ef7; }
+    .msg-card.variant-b .variant-badge { background: #a259f722; color: #a259f7; }
+    .use-count { font-size: 0.72rem; color: #444a66; }
+    .fokus-tag { font-size: 0.7rem; color: #5a607a; font-style: italic; }
+    .msg-text {
+      font-size: 0.85rem; color: #9aa0b4; line-height: 1.6;
+      background: #0f1117; border-radius: 8px; padding: 0.85rem;
+      white-space: pre-wrap; flex: 1;
+    }
+    .msg-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .copy-btn {
+      background: #4f8ef7; color: #fff; border: none; border-radius: 8px;
+      padding: 0.45rem 0.9rem; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+      transition: filter 0.15s; flex: 1; min-width: 110px;
+    }
+    .msg-card.variant-b .copy-btn { background: #a259f7; }
+    .copy-btn:hover { filter: brightness(1.15); }
+    .copy-btn.copied { background: #27ae60 !important; }
+    .msg-track-row {
+      display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;
+    }
+    .msg-track-btn {
+      border: none; border-radius: 8px; cursor: pointer;
+      font-weight: 700; font-size: 0.82rem; padding: 0.48rem 0.8rem;
+      transition: transform 0.12s, filter 0.15s;
+    }
+    .msg-track-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .msg-track-btn.minus { background: #252840; color: #d87b7b; min-width: 58px; }
+    .msg-track-btn.plus1 { background: #22324f; color: #7ab1ff; min-width: 58px; }
+    .msg-track-btn.plus5 { background: transparent; border: 2px solid #4fc97e; color: #4fc97e; min-width: 58px; }
+    .msg-track-hint { font-size: 0.72rem; color: #5a607a; margin-left: auto; }
+    .stats-wrap { max-width: 1300px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
+    .stats-kampagne-title {
+      font-size: 0.72rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.12em;
+      margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #252840;
+    }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    @media (max-width: 800px) { .stats-grid { grid-template-columns: 1fr; } }
+    .stats-card { background: #1c1f2e; border-radius: 14px; padding: 1.25rem; border: 1px solid #252840; }
+    .stats-card h3 { font-size: 0.78rem; color: #5a607a; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .ab-stat-row { display: flex; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #1a1d2e; gap: 0.5rem; }
+    .ab-stat-row:last-child { border-bottom: none; }
+    .ab-stat-label { font-size: 0.78rem; color: #9aa0b4; min-width: 140px; }
+    .ab-bar-wrap { display: flex; gap: 0.3rem; align-items: center; flex: 1; }
+    .ab-bar { height: 6px; border-radius: 3px; min-width: 4px; transition: width 0.4s; }
+    .bar-a { background: #4f8ef7; }
+    .bar-b { background: #a259f7; }
+    .ab-counts { display: flex; gap: 0.4rem; font-size: 0.72rem; }
+    .ab-count-a { color: #4f8ef7; font-weight: 700; }
+    .ab-count-b { color: #a259f7; font-weight: 700; }
+    .ab-empty { font-size: 0.78rem; color: #444a66; font-style: italic; }
   </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="topbar">
-    <div>
-      <div class="title">LinkedIn Outreach Counter</div>
-      <div class="subtitle">Zähler für Nachrichten, Follow-ups und Varianten</div>
-    </div>
-    <div class="pill" id="statusPill">Verbunden</div>
+
+<header>
+  <h1>📊 LinkedIn Outreach</h1>
+  <div class="header-actions">
+    <button class="pill" onclick="exportJSON()">⬇ JSON Export</button>
+    <button class="pill" onclick="reloadMessages()">🔄 Sync Notion</button>
+    <div id="sync-status">⏳ Verbinde…</div>
   </div>
+</header>
 
-  <div class="grid">
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('counter',this)">🎯 Counter</button>
+  <button class="tab-btn" onclick="switchTab('messages',this)">💬 Nachrichten</button>
+  <button class="tab-btn" onclick="switchTab('stats',this)">📈 A/B Stats</button>
+</div>
 
-    <!-- ░░ STATS ROW ░░ -->
-    <div class="card stats">
-      <div class="stat">
-        <div class="label">Gesamt</div>
-        <div class="value" id="totalCount">0</div>
-        <div class="small">Alle Aktionen</div>
-      </div>
-      <div class="stat">
-        <div class="label">Heute</div>
-        <div class="value" id="todayCount">0</div>
-        <div class="small">Heutige Aktionen</div>
-      </div>
-      <div class="stat">
-        <div class="label">Top Kampagne</div>
-        <div class="value" id="topCampaign">-</div>
-        <div class="small">Meiste Nutzungen</div>
-      </div>
-      <div class="stat">
-        <div class="label">Letzte Aktion</div>
-        <div class="value" style="font-size:20px" id="lastAction">-</div>
-        <div class="small" id="lastActionMeta">Noch keine Aktion</div>
+<div id="tab-counter" class="tab-content active">
+  <div class="counter-layout">
+    <div class="counter-grid" id="card-grid"></div>
+    <div class="sidebar">
+      <h3>📈 Auswertung</h3>
+      <div id="stats-total"></div>
+      <div style="margin-top:1rem">
+        <h3>🔄 Conversions</h3>
+        <div id="stats-conv" style="margin-top:0.75rem"></div>
       </div>
     </div>
+  </div>
+  <div class="footer-actions">
+    <button class="reset-btn" onclick="resetAll()">🔄 Alle Zähler zurücksetzen</button>
+  </div>
+</div>
 
-    <!-- ░░ TAGESZIEL SCHNELL-COUNTER ░░ -->
-    <div class="quick-counters">
-      <div class="qc-card">
-        <div class="qc-title">🔗 Vernetzungen heute</div>
-        <div class="qc-value" id="vcCount">0</div>
-        <div class="qc-goal" id="vcGoalText">Ziel: 30</div>
-        <div class="qc-bar vernetz"><div id="vcBar"></div></div>
-        <div class="qc-btns">
-          <button class="btn-primary btn-sm" onclick="addVC(1)">+1</button>
-          <button class="btn-blue btn-sm" onclick="addVC(5)">+5</button>
-          <button class="btn-ghost btn-sm" onclick="addVC(-1)">-1</button>
-          <button class="btn-ghost btn-sm" onclick="resetVC()">↺ Reset</button>
-        </div>
-      </div>
-      <div class="qc-card">
-        <div class="qc-title">✉️ DM1 heute</div>
-        <div class="qc-value" id="dm1Count">0</div>
-        <div class="qc-goal" id="dm1GoalText">Ziel: 15</div>
-        <div class="qc-bar dm1"><div id="dm1Bar"></div></div>
-        <div class="qc-btns">
-          <button class="btn-primary btn-sm" onclick="addDM1(1)">+1</button>
-          <button class="btn-blue btn-sm" onclick="addDM1(5)">+5</button>
-          <button class="btn-ghost btn-sm" onclick="addDM1(-1)">-1</button>
-          <button class="btn-ghost btn-sm" onclick="resetDM1()">↺ Reset</button>
-        </div>
-      </div>
-    </div>
+<div id="tab-messages" class="tab-content">
+  <div class="messages-wrap" id="messages-wrap">
+    <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Nachrichten aus Notion…</div>
+  </div>
+</div>
 
-    <!-- ░░ MAIN TABS ░░ -->
-    <div class="card main">
-      <div class="tabs">
-        <button class="tab active" id="tab-counter-btn" onclick="showTab('counter')">Counter</button>
-        <button class="tab" id="tab-stats-btn" onclick="showTab('stats')">Statistik</button>
-        <button class="tab" id="tab-export-btn" onclick="showTab('export')">Export</button>
-        <button class="tab" id="tab-einwaende-btn" onclick="showTab('einwaende')">Einwände</button>
-      </div>
-
-      <!-- TAB: Counter -->
-      <div id="tab-counter">
-        <h3 class="section-title">Neue Aktion</h3>
-        <div class="controls">
-          <div class="row">
-            <div class="field">
-              <label>Kampagne</label>
-              <select id="kampagne">
-                <option value="leadgen">leadgen</option>
-                <option value="recruiting">recruiting</option>
-                <option value="partnerships">partnerships</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Stage</label>
-              <select id="stage">
-                <option value="dm1">dm1</option>
-                <option value="dm2">dm2</option>
-                <option value="dm3">dm3</option>
-                <option value="followup">followup</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Variante</label>
-              <select id="variante">
-                <option value="a">a</option>
-                <option value="b">b</option>
-                <option value="c">c</option>
-              </select>
-            </div>
-          </div>
-          <div class="btnrow">
-            <button class="btn-primary" onclick="trackMsgAction(1)">+1</button>
-            <button class="btn-blue" onclick="trackMsgAction(5)">+5</button>
-            <button class="btn-ghost" onclick="reloadData()">Aktualisieren</button>
-            <button class="btn-danger" onclick="clearLocal()">Lokal löschen</button>
-          </div>
-          <div>
-            <div class="muted" style="margin-bottom:8px">Fortschritt heute</div>
-            <div class="bar"><div id="todayBar"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: Statistik -->
-      <div id="tab-stats" style="display:none">
-        <h3 class="section-title">Verwendung</h3>
-        <div id="statsContent" class="msg-list"></div>
-      </div>
-
-      <!-- TAB: Export -->
-      <div id="tab-export" style="display:none">
-        <h3 class="section-title">Export</h3>
-        <div class="btnrow">
-          <button class="btn-blue" onclick="exportCSV()">CSV exportieren</button>
-          <button class="btn-ghost" onclick="copyJSON()">JSON kopieren</button>
-        </div>
-        <p class="muted" style="margin-top:12px">Exportiert lokale Daten aus dem Browser.</p>
-      </div>
-
-      <!-- TAB: Einwände -->
-      <div id="tab-einwaende" style="display:none">
-        <h3 class="section-title">Einwände & Antworten</h3>
-        <div class="btnrow" style="margin-bottom:14px">
-          <button class="btn-primary btn-sm" onclick="showAddEinwand()">+ Neu</button>
-          <button class="btn-ghost btn-sm" onclick="loadEinwaende()">↺ Laden</button>
-          <button class="btn-blue btn-sm" onclick="syncEinwaendeToNotion()">☁ Notion Sync</button>
-        </div>
-
-        <!-- Neuer Einwand Formular -->
-        <div id="newEinwandForm" style="display:none;margin-bottom:16px" class="einwand-card">
-          <strong style="color:#f8fafc">Neuer Einwand</strong>
-          <div class="field">
-            <label>Einwand (Titel) *</label>
-            <input id="newEinwandText" placeholder="z.B. Kein Budget gerade" />
-          </div>
-          <div class="field">
-            <label>Antwort / Reaktion</label>
-            <textarea id="newEinwandAntwort" placeholder="Deine Antwort auf diesen Einwand..."></textarea>
-          </div>
-          <div class="field">
-            <label>Kategorie</label>
-            <select id="newEinwandKat">
-              <option value="budget">Budget</option>
-              <option value="timing">Timing</option>
-              <option value="interesse">Kein Interesse</option>
-              <option value="vertrauen">Vertrauen</option>
-              <option value="konkurrenz">Konkurrenz</option>
-              <option value="sonstiges">Sonstiges</option>
-            </select>
-          </div>
-          <div class="btnrow">
-            <button class="btn-primary btn-sm" onclick="saveNewEinwand()">Speichern</button>
-            <button class="btn-ghost btn-sm" onclick="document.getElementById('newEinwandForm').style.display='none'">Abbrechen</button>
-          </div>
-        </div>
-
-        <div id="einwaendeList" class="msg-list">
-          <div class="muted">Lade Einwände...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ░░ SIDEBAR ░░ -->
-    <div class="card side">
-      <h3 class="section-title">Message Uses</h3>
-      <div id="messageUses" class="msg-list"></div>
-    </div>
+<div id="tab-stats" class="tab-content">
+  <div class="stats-wrap" id="stats-wrap">
+    <div style="color:#5a607a;text-align:center;padding:3rem">⏳ Lade Statistiken…</div>
   </div>
 </div>
 
 <script>
-// ═══════════════════════════════════
-//  KONFIGURATION — hier anpassen
-// ═══════════════════════════════════
-const SUPABASE_URL      = "https://YOUR_PROJECT.supabase.co";
-const SUPABASE_ANON_KEY = "YOUR_ANON_KEY";
-const NOTION_PROXY      = "https://YOUR_WORKER.workers.dev";   // Cloudflare Worker URL
-const NOTION_EINWAENDE_DB = "YOUR_NOTION_EINWAENDE_DB_ID";     // 32-stellige DB-ID
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const SUPABASE_URL = "https://wvfooydrjkcoamohylch.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2Zm9veWRyamtjb2Ftb2h5bGNoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMjQxMjMsImV4cCI6MjA5NTgwMDEyM30.vn-lcQrbHbtC_FhdicCrHn_pQyzzwTqK9CjGS6uyFQ0";
+const NOTION_PROXY = "https://linkedin-dashboard.stenrobbin.workers.dev/";
+const NOTION_DB_ID = "99f511e015ca82538b2b81cc51b56ef8";
 
-// Tagesziele — einfach hier ändern
-const ZIEL_VERNETZUNGEN = 30;
-const ZIEL_DM1          = 15;
-// ═══════════════════════════════════
+// Eindeutige Session-ID — verhindert Doppelzählung durch eigene Realtime-Events
+const SESSION_ID = Math.random().toString(36).slice(2);
 
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const STAGES = [
+  { key: "kontaktanfrage",    label: "Kontaktanfrage",   accent: "#4f8ef7" },
+  { key: "vernetzt",          label: "Vernetzt",          accent: "#5b8dee" },
+  { key: "dm1",               label: "DM 1",              accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",             accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",         accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung", accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",  accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",      accent: "#27ae60" },
+];
+const STAGES_PLUS5 = ["kontaktanfrage","vernetzt","dm1","pitch"];
 
-const SESSION_ID = localStorage.getItem("session_id") || crypto.randomUUID();
-localStorage.setItem("session_id", SESSION_ID);
+const MSG_STAGES = [
+  { key: "dm1",               label: "DM 1",              accent: "#7c6ff7" },
+  { key: "pitch",             label: "Pitch",             accent: "#a259f7" },
+  { key: "follow_up",         label: "Follow-up",         accent: "#f7925a" },
+  { key: "einwandbehandlung", label: "Einwandbehandlung", accent: "#f75a5a" },
+  { key: "positive_antwort",  label: "Positive Antwort",  accent: "#4fc97e" },
+  { key: "erstgespraech",     label: "Erstgespräch",      accent: "#27ae60" },
+];
 
-let actions   = JSON.parse(localStorage.getItem("actions")   || "[]");
-let msgUses   = JSON.parse(localStorage.getItem("msgUses")   || "{}");
-let vcToday   = getStoredDailyCount("vcToday");
-let dm1Today  = getStoredDailyCount("dm1Today");
+const KAMPAGNEN = [
+  { key: "leadgen", label: "Leadgenerierung" },
+  { key: "support", label: "Support & FAQ" },
+];
 
-// ─── helpers für tages-reset ───────
-function todayKey() { return new Date().toISOString().slice(0,10); }
+// ─── SUPABASE ─────────────────────────────────────────────────────────────────
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-function getStoredDailyCount(key) {
-  const raw = localStorage.getItem(key);
-  if (!raw) return 0;
-  try {
-    const obj = JSON.parse(raw);
-    if (obj.date === todayKey()) return obj.count;
-  } catch(e) {}
-  return 0;
-}
+// ─── STATE ────────────────────────────────────────────────────────────────────
+const state = {};
+STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
 
-function setStoredDailyCount(key, val) {
-  localStorage.setItem(key, JSON.stringify({ date: todayKey(), count: val }));
-}
+let msgUses = {};       // { "kampagne_stage_variante": count }
+let notionCache = {};   // { kampagne: { stage: [{ variante, text, fokus }] } }
 
-function saveLocal() {
-  localStorage.setItem("actions", JSON.stringify(actions));
-  localStorage.setItem("msgUses", JSON.stringify(msgUses));
-}
-
-// ─── Vernetzungen Counter ───────────
-function addVC(delta) {
-  vcToday = Math.max(0, vcToday + delta);
-  setStoredDailyCount("vcToday", vcToday);
-  renderVCDM1();
-  // optionales Supabase-Log
-  db.from("daily_counts").insert({
-    type: "vernetzung",
-    delta: delta,
-    session_id: SESSION_ID,
-    ts: new Date().toISOString()
-  }).then(({error}) => { if(error) console.warn("VC insert:", error) });
-}
-
-function resetVC() {
-  if (!confirm("Vernetzungen für heute zurücksetzen?")) return;
-  vcToday = 0;
-  setStoredDailyCount("vcToday", 0);
-  renderVCDM1();
-}
-
-function renderVCDM1() {
-  document.getElementById("vcCount").textContent = vcToday;
-  document.getElementById("dm1Count").textContent = dm1Today;
-
-  const vcPct  = Math.min(100, (vcToday  / ZIEL_VERNETZUNGEN) * 100);
-  const dm1Pct = Math.min(100, (dm1Today / ZIEL_DM1)          * 100);
-
-  document.getElementById("vcBar").style.width   = vcPct  + "%";
-  document.getElementById("dm1Bar").style.width  = dm1Pct + "%";
-
-  document.getElementById("vcGoalText").textContent
-    = `Ziel: ${ZIEL_VERNETZUNGEN} | ${vcToday >= ZIEL_VERNETZUNGEN ? "✅ erreicht" : `noch ${ZIEL_VERNETZUNGEN - vcToday} offen`}`;
-  document.getElementById("dm1GoalText").textContent
-    = `Ziel: ${ZIEL_DM1} | ${dm1Today >= ZIEL_DM1 ? "✅ erreicht" : `noch ${ZIEL_DM1 - dm1Today} offen`}`;
-}
-
-// ─── DM1 Counter ───────────────────
-function addDM1(delta) {
-  dm1Today = Math.max(0, dm1Today + delta);
-  setStoredDailyCount("dm1Today", dm1Today);
-  renderVCDM1();
-  db.from("daily_counts").insert({
-    type: "dm1",
-    delta: delta,
-    session_id: SESSION_ID,
-    ts: new Date().toISOString()
-  }).then(({error}) => { if(error) console.warn("DM1 insert:", error) });
-}
-
-function resetDM1() {
-  if (!confirm("DM1 für heute zurücksetzen?")) return;
-  dm1Today = 0;
-  setStoredDailyCount("dm1Today", 0);
-  renderVCDM1();
-}
-
-// ─── Tabs ───────────────────────────
-function showTab(name) {
-  ["counter","stats","export","einwaende"].forEach(t => {
-    document.getElementById(`tab-${t}`).style.display = t === name ? "block" : "none";
-    document.getElementById(`tab-${t}-btn`).classList.toggle("active", t === name);
-  });
-  if (name === "stats")     renderStats();
-  if (name === "einwaende") loadEinwaende();
-}
-
-// ─── Action Tracking ───────────────
-function currentValues() {
-  return {
-    kampagne: document.getElementById("kampagne").value,
-    stage:    document.getElementById("stage").value,
-    variante: document.getElementById("variante").value
-  };
-}
-
-async function insertMsgUse(kampagne, stage, variante) {
-  if (!kampagne || !stage || !variante) return;
-  const { error } = await db.from("message_uses").insert({
-    kampagne, stage, variante,
-    source: "outreach_counter",
-    session_id: SESSION_ID
-  });
-  if (error) { console.error("message_uses insert:", error); return; }
-  const useKey = `${kampagne}_${stage}_${variante}`;
-  msgUses[useKey] = (msgUses[useKey] || 0) + 1;
-  saveLocal();
-  renderMessageUses();
-}
-
-async function trackMsgAction(delta) {
-  const { kampagne, stage, variante } = currentValues();
-  for (let i = 0; i < delta; i++) {
-    actions.push({ kampagne, stage, variante, ts: new Date().toISOString() });
-    await insertMsgUse(kampagne, stage, variante);
-    // DM1 automatisch mitzählen wenn stage === dm1
-    if (stage === "dm1") { addDM1(1); }
-  }
-  saveLocal();
-  renderAll();
-}
-
-// ─── Render Helpers ────────────────
-function renderAll() { renderStats(); renderMessageUses(); renderVCDM1(); }
-
-function renderStats() {
-  const total = actions.length;
-  const today = actions.filter(a => a.ts.startsWith(todayKey())).length;
-
-  document.getElementById("totalCount").textContent = total;
-  document.getElementById("todayCount").textContent = today;
-  document.getElementById("todayBar").style.width = `${Math.min(100, today * 10)}%`;
-
-  const campMap = {};
-  actions.forEach(a => campMap[a.kampagne] = (campMap[a.kampagne] || 0) + 1);
-  const top = Object.entries(campMap).sort((a,b) => b[1]-a[1])[0];
-  document.getElementById("topCampaign").textContent = top ? top[0] : "-";
-
-  const last = actions[actions.length - 1];
-  document.getElementById("lastAction").textContent = last ? `${last.kampagne}/${last.stage}` : "-";
-  document.getElementById("lastActionMeta").textContent = last ? `${last.variante} · ${last.ts}` : "Noch keine Aktion";
-
-  const wrap = document.getElementById("statsContent");
-  wrap.innerHTML = "";
-  const grouped = {};
-  actions.forEach(a => {
-    const k = `${a.kampagne} / ${a.stage} / ${a.variante}`;
-    grouped[k] = (grouped[k] || 0) + 1;
-  });
-  Object.entries(grouped).sort((a,b) => b[1]-a[1]).forEach(([k,v]) => {
-    const el = document.createElement("div");
-    el.className = "msg";
-    el.innerHTML = `<div class="msghead"><strong>${k}</strong><span class="chip">${v}×</span></div>`;
-    wrap.appendChild(el);
-  });
-}
-
-function renderMessageUses() {
-  const wrap = document.getElementById("messageUses");
-  wrap.innerHTML = "";
-  const entries = Object.entries(msgUses).sort((a,b) => b[1]-a[1]);
-  if (!entries.length) { wrap.innerHTML = `<div class="muted">Noch keine Nutzungen.</div>`; return; }
-  entries.forEach(([k,v]) => {
-    const el = document.createElement("div");
-    el.className = "msg";
-    el.innerHTML = `<div class="msghead"><strong>${k}</strong><span class="chip">${v}× verwendet</span></div>`;
-    wrap.appendChild(el);
-  });
-}
-
-// ─── Einwände (Notion) ─────────────
-let einwaendeCache = [];
-
-async function loadEinwaende() {
-  const wrap = document.getElementById("einwaendeList");
-  wrap.innerHTML = `<div class="muted">Lade aus Notion...</div>`;
-  try {
-    const res = await fetch(`${NOTION_PROXY}?db=${NOTION_EINWAENDE_DB}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ page_size: 100 })
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    einwaendeCache = (data.results || []).map(parseNotionEinwand);
-    renderEinwaende();
-  } catch(e) {
-    console.error("loadEinwaende:", e);
-    wrap.innerHTML = `<div class="muted">⚠️ Notion nicht erreichbar — lokaler Modus aktiv.</div>`;
-    const local = JSON.parse(localStorage.getItem("einwaende") || "[]");
-    einwaendeCache = local;
-    renderEinwaende();
-  }
-}
-
-function parseNotionEinwand(page) {
-  const props = page.properties || {};
-  return {
-    id:       page.id,
-    notionId: page.id,
-    einwand:  props.einwand?.title?.[0]?.plain_text   || props.Name?.title?.[0]?.plain_text || "",
-    antwort:  props.antwort?.rich_text?.[0]?.plain_text || "",
-    kategorie:props.kategorie?.select?.name            || "sonstiges",
-    aktiv:    props.aktiv?.checkbox !== false
-  };
-}
-
-function renderEinwaende() {
-  const wrap = document.getElementById("einwaendeList");
-  wrap.innerHTML = "";
-  const items = einwaendeCache.filter(e => e.aktiv !== false);
-  if (!items.length) {
-    wrap.innerHTML = `<div class="muted">Keine Einwände vorhanden.</div>`;
-    return;
-  }
-  items.forEach((item, idx) => {
-    const div = document.createElement("div");
-    div.className = "einwand-card";
-    div.id = `einwand-${idx}`;
-    div.innerHTML = `
-      <div class="msghead">
-        <span class="einwand-text">${escHtml(item.einwand)}</span>
-        <span class="tag">${escHtml(item.kategorie)}</span>
-      </div>
-      ${item.antwort
-        ? `<div class="antwort-text">${escHtml(item.antwort)}</div>`
-        : `<div class="muted" style="font-size:13px">Noch keine Antwort hinterlegt.</div>`
-      }
-      <div class="einwand-edit" id="edit-${idx}">
-        <div class="field">
-          <label>Einwand bearbeiten</label>
-          <input id="edit-einwand-${idx}" value="${escAttr(item.einwand)}" />
+// ─── COUNTER TAB ─────────────────────────────────────────────────────────────
+function renderCards() {
+  document.getElementById("card-grid").innerHTML = STAGES.map((s, i) => {
+    const p5 = STAGES_PLUS5.includes(s.key);
+    return `
+      <div class="card" id="card-${s.key}" style="--accent:${s.accent}">
+        <span class="stage-num">Stage ${i+1}</span>
+        <h2>${s.label}</h2>
+        <div class="count" id="count-${s.key}">0</div>
+        <div class="last-click" id="last-${s.key}"></div>
+        <div class="btn-row">
+          <button class="minus-btn" id="minus-${s.key}" onclick="handleClick('${s.key}',-1)">−1</button>
+          <button class="plus-btn" onclick="handleClick('${s.key}',1)">+1</button>
+          ${p5 ? `<button class="plus5-btn" onclick="handleClick('${s.key}',5)">+5</button>` : ""}
         </div>
-        <div class="field">
-          <label>Antwort bearbeiten</label>
-          <textarea id="edit-antwort-${idx}">${escHtml(item.antwort)}</textarea>
-        </div>
-        <div class="field">
-          <label>Kategorie</label>
-          <select id="edit-kat-${idx}">
-            ${["budget","timing","interesse","vertrauen","konkurrenz","sonstiges"]
-              .map(k => `<option value="${k}"${k===item.kategorie?" selected":""}>${k}</option>`).join("")}
-          </select>
-        </div>
-        <div class="btnrow">
-          <button class="btn-save btn-sm" onclick="saveEinwand(${idx})">💾 Speichern</button>
-          <button class="btn-ghost btn-sm" onclick="toggleEdit(${idx})">Abbrechen</button>
-          <button class="btn-danger btn-sm" onclick="deleteEinwand(${idx})">Löschen</button>
-        </div>
-      </div>
-      <div class="btnrow">
-        <button class="btn-ghost btn-sm" onclick="toggleEdit(${idx})">✏️ Bearbeiten</button>
-      </div>
-    `;
-    wrap.appendChild(div);
-  });
+      </div>`;
+  }).join("");
 }
 
-function toggleEdit(idx) {
-  const el = document.getElementById(`edit-${idx}`);
-  el.classList.toggle("open");
-}
-
-async function saveEinwand(idx) {
-  const item    = einwaendeCache[idx];
-  const einwand = document.getElementById(`edit-einwand-${idx}`).value.trim();
-  const antwort = document.getElementById(`edit-antwort-${idx}`).value.trim();
-  const kat     = document.getElementById(`edit-kat-${idx}`).value;
-
-  // lokaler Cache Update
-  einwaendeCache[idx] = { ...item, einwand, antwort, kategorie: kat };
-  saveEinwaendeLocal();
-
-  // Notion Update (PATCH via Worker)
-  try {
-    await fetch(`${NOTION_PROXY}/update`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        pageId: item.notionId,
-        properties: {
-          einwand:  { title:     [{ text: { content: einwand } }] },
-          antwort:  { rich_text: [{ text: { content: antwort } }] },
-          kategorie:{ select:    { name: kat } }
-        }
-      })
-    });
-    showToast("✅ Gespeichert & in Notion aktualisiert");
-  } catch(e) {
-    showToast("💾 Lokal gespeichert (Notion offline)");
+async function loadCounterState() {
+  const { data, error } = await db
+    .from("counter_events")
+    .select("stage, delta, created_at")
+    .order("created_at", { ascending: true });
+  if (error) { console.error(error); return; }
+  STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
+  for (const row of data) {
+    const s = state[row.stage];
+    if (!s) continue;
+    s.count = Math.max(0, s.count + row.delta);
+    s.lastClick = row.created_at;
   }
-  renderEinwaende();
+  updateAllCounterUI();
 }
 
-async function saveNewEinwand() {
-  const einwand = document.getElementById("newEinwandText").value.trim();
-  const antwort = document.getElementById("newEinwandAntwort").value.trim();
-  const kat     = document.getElementById("newEinwandKat").value;
-  if (!einwand) { alert("Einwand-Text darf nicht leer sein."); return; }
-
-  const newItem = { id: crypto.randomUUID(), notionId: null, einwand, antwort, kategorie: kat, aktiv: true };
-  einwaendeCache.push(newItem);
-  saveEinwaendeLocal();
-
-  // Notion Create (POST via Worker)
-  try {
-    const res = await fetch(`${NOTION_PROXY}/create`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        dbId: NOTION_EINWAENDE_DB,
-        properties: {
-          einwand:  { title:     [{ text: { content: einwand } }] },
-          antwort:  { rich_text: [{ text: { content: antwort } }] },
-          kategorie:{ select:    { name: kat } },
-          aktiv:    { checkbox:  true }
-        }
-      })
-    });
-    const page = await res.json();
-    einwaendeCache[einwaendeCache.length - 1].notionId = page.id;
-    showToast("✅ In Notion angelegt");
-  } catch(e) {
-    showToast("💾 Lokal gespeichert (Notion offline)");
-  }
-  document.getElementById("newEinwandForm").style.display = "none";
-  document.getElementById("newEinwandText").value  = "";
-  document.getElementById("newEinwandAntwort").value = "";
-  renderEinwaende();
-}
-
-async function deleteEinwand(idx) {
-  if (!confirm("Einwand wirklich löschen?")) return;
-  const item = einwaendeCache[idx];
-  einwaendeCache.splice(idx, 1);
-  saveEinwaendeLocal();
-  if (item.notionId) {
-    try {
-      await fetch(`${NOTION_PROXY}/archive`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pageId: item.notionId })
+function updateAllCounterUI() {
+  STAGES.forEach(s => {
+    document.getElementById(`count-${s.key}`).textContent = state[s.key].count;
+    const minusBtn = document.getElementById(`minus-${s.key}`);
+    if (minusBtn) minusBtn.disabled = state[s.key].count <= 0;
+    const last = document.getElementById(`last-${s.key}`);
+    if (last && state[s.key].lastClick) {
+      last.textContent = "zuletzt " + new Date(state[s.key].lastClick).toLocaleTimeString("de-DE", {
+        hour: "2-digit", minute: "2-digit"
       });
-    } catch(e) { console.warn("archive error:", e); }
-  }
-  renderEinwaende();
+    }
+  });
+  renderSidebar();
 }
 
-async function syncEinwaendeToNotion() {
-  showToast("🔄 Sync läuft...");
-  await loadEinwaende();
+async function handleClick(key, delta) {
+  const s = state[key];
+  const newCount = s.count + delta;
+  if (newCount < 0) return;
+
+  // Sofort lokal updaten
+  s.count = newCount;
+  s.lastClick = new Date().toISOString();
+  updateAllCounterUI();
+
+  const card = document.getElementById(`card-${key}`);
+  if (card) { card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse"); }
+
+  // session_id mitspeichern → Realtime-Listener ignoriert eigene Events
+  const { error } = await db.from("counter_events").insert({ stage: key, delta, session_id: SESSION_ID });
+  if (error) console.error("Counter insert error:", error);
 }
 
-function showAddEinwand() {
-  document.getElementById("newEinwandForm").style.display = "block";
+function renderSidebar() {
+  const dm1   = state["dm1"].count;
+  const pitch = state["pitch"].count;
+  const pos   = state["positive_antwort"].count;
+  const erst  = state["erstgespraech"].count;
+  const kont  = state["kontaktanfrage"].count;
+  const vern  = state["vernetzt"].count;
+
+  document.getElementById("stats-total").innerHTML = STAGES.map(s =>
+    `<div class="stat-row">
+       <span class="stat-label">${s.label}</span>
+       <span class="stat-accent" style="color:${s.accent}">${state[s.key].count}</span>
+     </div>`
+  ).join("");
+
+  const convs = [
+    ["Anfrage → Vernetzt", kont, vern],
+    ["Vernetzt → DM 1",    vern, dm1],
+    ["DM 1 → Pitch",       dm1,  pitch],
+    ["Pitch → Positiv",    pitch, pos],
+    ["Positiv → Gespräch", pos,   erst],
+  ];
+  document.getElementById("stats-conv").innerHTML = convs.map(([lbl,a,b]) => {
+    const pct = a > 0 ? Math.round(b/a*100) : 0;
+    return `<div class="conv-row"><span>${lbl}</span><span>${pct}%</span></div>`;
+  }).join("");
 }
 
-function saveEinwaendeLocal() {
-  localStorage.setItem("einwaende", JSON.stringify(einwaendeCache));
+async function resetAll() {
+  if (!confirm("Alle Zähler auf 0 zurücksetzen?")) return;
+  await db.from("counter_events").delete().neq("id", 0);
+  STAGES.forEach(s => state[s.key] = { count: 0, lastClick: null });
+  updateAllCounterUI();
 }
 
-// ─── Utils ─────────────────────────
-function escHtml(s) {
-  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-function escAttr(s) { return escHtml(s); }
-
-function showToast(msg) {
-  let t = document.getElementById("toast");
-  if (!t) {
-    t = document.createElement("div");
-    t.id = "toast";
-    Object.assign(t.style, {
-      position:"fixed",bottom:"24px",right:"24px",background:"#1f2937",
-      border:"1px solid #334155",borderRadius:"12px",padding:"12px 18px",
-      color:"#e5e7eb",fontSize:"14px",zIndex:"999",boxShadow:"0 4px 20px rgba(0,0,0,.4)"
-    });
-    document.body.appendChild(t);
-  }
-  t.textContent = msg;
-  t.style.display = "block";
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.style.display = "none", 3000);
-}
-
-function reloadData() { renderAll(); }
-
-function clearLocal() {
-  if (!confirm("Lokal gespeicherte Daten wirklich löschen?")) return;
-  actions = []; msgUses = {};
-  saveLocal();
-  renderAll();
-}
-
-function exportCSV() {
-  const rows = [["kampagne","stage","variante","ts"],
-    ...actions.map(a => [a.kampagne,a.stage,a.variante,a.ts])];
-  const csv = rows.map(r => r.map(x => `"${String(x).replaceAll('"','""')}"`).join(",")).join("\n");
-  const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+function exportJSON() {
+  const out = {};
+  STAGES.forEach(s => out[s.key] = state[s.key].count);
+  const blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "outreach_counter.csv";
+  a.download = "outreach_export.json";
   a.click();
 }
 
-async function copyJSON() {
-  await navigator.clipboard.writeText(JSON.stringify({ actions, msgUses, session_id: SESSION_ID }, null, 2));
-  showToast("📋 JSON kopiert");
+// ─── NOTION HELPERS ───────────────────────────────────────────────────────────
+function getText(prop) {
+  if (!prop) return "";
+  if (prop.type === "title"     && prop.title)     return prop.title.map(t => t.plain_text).join("");
+  if (prop.type === "rich_text" && prop.rich_text) return prop.rich_text.map(t => t.plain_text).join("");
+  if (prop.type === "select"    && prop.select)    return prop.select.name || "";
+  return "";
+}
+function getCheckbox(prop) {
+  if (!prop) return null;
+  return prop.type === "checkbox" ? !!prop.checkbox : null;
+}
+function normalizeKey(v) {
+  return String(v||"").trim().toLowerCase().replace(/\s+/g,"_");
+}
+function normalizeStage(v) {
+  return String(v||"").trim().toLowerCase()
+    .replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss")
+    .replace(/\s+/g,"_");
+}
+function escHtml(str) {
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
-// ─── Init ──────────────────────────
-renderAll();
-renderVCDM1();
+// ─── NOTION LOAD ──────────────────────────────────────────────────────────────
+async function loadMessages() {
+  const status = document.getElementById("sync-status");
+  status.textContent = "🔄 Lade…";
+  try {
+    const res  = await fetch(`${NOTION_PROXY}?db=${NOTION_DB_ID}`);
+    const json = await res.json();
+    const results = json.results || [];
+    notionCache = {};
+    let count = 0;
+    for (const page of results) {
+      const p = page.properties || {};
+      const kampagneRaw = getText(p.kampagne) || getText(p.Kampagne) || "leadgen";
+      const stageRaw    = getText(p.stage)    || getText(p.Stage)    || "dm1";
+      const varianteRaw = getText(p.variante) || getText(p.Variante) || "A";
+      const textRaw     = getText(p.text)     || getText(p.Text)     || getText(p.nachricht) || getText(p.Nachricht) || "";
+      const fokus       = getText(p.fokus)    || getText(p.Fokus)    || "";
+      const aktivRaw    = getCheckbox(p.aktiv) ?? getCheckbox(p.Aktiv);
+      const kampagne  = normalizeKey(kampagneRaw);
+      const stage     = normalizeStage(stageRaw);
+      const variante  = String(varianteRaw||"A").trim().toLowerCase();
+      const nachricht = String(textRaw||"").trim();
+      if (!nachricht)                                 continue;
+      if (aktivRaw === false)                         continue;
+      if (!KAMPAGNEN.some(k => k.key === kampagne))   continue;
+      if (!MSG_STAGES.some(s => s.key === stage))     continue;
+      if (!["a","b"].includes(variante))              continue;
+      if (!notionCache[kampagne])        notionCache[kampagne] = {};
+      if (!notionCache[kampagne][stage]) notionCache[kampagne][stage] = [];
+      notionCache[kampagne][stage].push({ variante, text: nachricht, fokus });
+      count++;
+    }
+    Object.keys(notionCache).forEach(k =>
+      Object.keys(notionCache[k]).forEach(s =>
+        notionCache[k][s].sort((a,b) => a.variante.localeCompare(b.variante))
+      )
+    );
+    status.textContent = `✅ ${count} Nachrichten`;
+  } catch(e) {
+    console.error(e);
+    status.textContent = "❌ Fehler";
+  }
+  renderMessagesFlat();
+}
+
+async function reloadMessages() {
+  await loadMessages();
+  await loadMsgUses();
+  renderMessagesFlat();
+  renderStats();
+}
+
+// ─── MESSAGES RENDER ──────────────────────────────────────────────────────────
+function renderMessagesFlat() {
+  const wrap = document.getElementById("messages-wrap");
+  let html = "";
+  for (const kamp of KAMPAGNEN) {
+    let kampHtml = "";
+    for (const st of MSG_STAGES) {
+      const variants = notionCache[kamp.key]?.[st.key] || [];
+      if (!variants.length) continue;
+      kampHtml += `<div class="stage-block">
+        <div class="stage-title" style="--stage-accent:${st.accent}">
+          <span class="stage-title-dot"></span>${st.label}
+        </div>
+        <div class="ab-grid">`;
+      for (const v of variants) {
+        const vClass  = v.variante === "b" ? "variant-b" : "variant-a";
+        const useKey  = `${kamp.key}_${st.key}_${v.variante}`;
+        const uses    = msgUses[useKey] || 0;
+        const uid     = Math.random().toString(36).slice(2,7);
+        const btnId   = `copy-${uid}`;
+        kampHtml += `
+          <div class="msg-card ${vClass}">
+            <div class="msg-header">
+              <span class="variant-badge">Variante ${v.variante.toUpperCase()}</span>
+              <span class="use-count" id="uses-${useKey}">${uses}× verwendet</span>
+            </div>
+            ${v.fokus ? `<div class="fokus-tag">${escHtml(v.fokus)}</div>` : ""}
+            <div class="msg-text">${escHtml(v.text)}</div>
+            <div class="msg-actions">
+              <button class="copy-btn" id="${btnId}"
+                onclick="copyMsg('${btnId}','${kamp.key}','${st.key}','${v.variante}',this)">
+                📋 Kopieren
+              </button>
+            </div>
+            <div class="msg-track-row">
+              <button class="msg-track-btn minus"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',-1)">−1</button>
+              <button class="msg-track-btn plus1"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',1)">+1</button>
+              <button class="msg-track-btn plus5"
+                onclick="trackMsgAction('${kamp.key}','${st.key}','${v.variante}',5)">+5</button>
+              <span class="msg-track-hint">Counter + A/B</span>
+            </div>
+          </div>`;
+      }
+      kampHtml += `</div></div>`;
+    }
+    if (kampHtml) html += `<div class="kampagne-block"><div class="kampagne-title">${kamp.label}</div>${kampHtml}</div>`;
+  }
+  if (!html) html = `<div style="color:#5a607a;text-align:center;padding:3rem">
+    Keine Nachrichten geladen.<br>
+    Prüfe Notion-Properties: <b>kampagne</b>, <b>stage</b>, <b>variante</b>, <b>text</b>, <b>aktiv</b>.
+  </div>`;
+  wrap.innerHTML = html;
+}
+
+// ─── COPY ─────────────────────────────────────────────────────────────────────
+async function copyMsg(btnId, kampagne, stage, variante, btn) {
+  const v = notionCache[kampagne]?.[stage]?.find(x => x.variante === variante);
+  if (!v) return;
+  try {
+    await navigator.clipboard.writeText(v.text);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = v.text; document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); document.body.removeChild(ta);
+  }
+  btn.textContent = "✅ Kopiert!";
+  btn.classList.add("copied");
+  setTimeout(() => { btn.textContent = "📋 Kopieren"; btn.classList.remove("copied"); }, 1800);
+
+  // Nur message_uses tracken — kein Counter-Increment beim Kopieren
+  await insertMsgUse(kampagne, stage, variante);
+}
+
+// ─── TRACK MSG ACTION (Counter + A/B) ─────────────────────────────────────────
+async function trackMsgAction(kampagne, stage, variante, delta) {
+  // 1. Counter lokal updaten
+  const s = state[stage];
+  if (!s) return;
+  const newCount = s.count + delta;
+  if (newCount < 0) return;
+  s.count = newCount;
+  s.lastClick = new Date().toISOString();
+  updateAllCounterUI();
+
+  const card = document.getElementById(`card-${stage}`);
+  if (card) { card.classList.remove("pulse"); void card.offsetWidth; card.classList.add("pulse"); }
+
+  // 2. Counter in DB mit session_id
+  const { error: ce } = await db.from("counter_events").insert({ stage, delta, session_id: SESSION_ID });
+  if (ce) console.error("Counter insert error:", ce);
+
+  // 3. message_uses nur für delta > 0 tracken (Nutzung, kein Abzug)
+  if (delta > 0) {
+    for (let i = 0; i < delta; i++) {
+      await insertMsgUse(kampagne, stage, variante);
+    }
+  }
+}
+
+// ─── MSG USE INSERT & LOCAL UPDATE ───────────────────────────────────────────
+async function insertMsgUse(kampagne, stage, variante) {
+  const { error } = await db.from("message_uses").insert({ kampagne, stage, variante, session_id: SESSION_ID });
+  if (error) { console.error("message_uses insert error:", error); return; }
+
+  // Lokal inkrementieren — Realtime ignoriert eigene session
+  const useKey = `${kampagne}_${stage}_${variante}`;
+  msgUses[useKey] = (msgUses[useKey] || 0) + 1;
+  const el = document.getElementById(`uses-${useKey}`);
+  if (el) el.textContent = msgUses[useKey] + "× verwendet";
+  if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
+}
+
+// ─── MSG USES LOAD ────────────────────────────────────────────────────────────
+async function loadMsgUses() {
+  const { data, error } = await db.from("message_uses").select("kampagne,stage,variante");
+  if (error) { console.error(error); return; }
+  msgUses = {};
+  for (const row of data) {
+    const key = `${row.kampagne}_${row.stage}_${row.variante}`;
+    msgUses[key] = (msgUses[key] || 0) + 1;
+  }
+}
+
+// ─── A/B STATS ────────────────────────────────────────────────────────────────
+function renderStats() {
+  const wrap = document.getElementById("stats-wrap");
+  let html = "";
+  for (const kamp of KAMPAGNEN) {
+    html += `<div><div class="stats-kampagne-title">${kamp.label}</div><div class="stats-grid">`;
+    for (const st of MSG_STAGES) {
+      const a = msgUses[`${kamp.key}_${st.key}_a`] || 0;
+      const b = msgUses[`${kamp.key}_${st.key}_b`] || 0;
+      const total = a + b;
+      const barA = total > 0 ? Math.round(a/total*100) : 0;
+      const barB = total > 0 ? Math.round(b/total*100) : 0;
+      html += `
+        <div class="stats-card">
+          <h3 style="color:${st.accent}">${st.label}</h3>
+          ${total === 0
+            ? `<div class="ab-empty">Noch keine Nutzung erfasst</div>`
+            : `<div class="ab-stat-row">
+                <span class="ab-stat-label">Verteilung</span>
+                <div class="ab-bar-wrap">
+                  <div class="ab-bar bar-a" style="width:${barA}%"></div>
+                  <div class="ab-bar bar-b" style="width:${barB}%"></div>
+                </div>
+                <div class="ab-counts">
+                  <span class="ab-count-a">A: ${a}</span>
+                  <span class="ab-count-b">B: ${b}</span>
+                </div>
+              </div>
+              <div class="ab-stat-row">
+                <span class="ab-stat-label">Gesamt</span>
+                <span style="font-size:0.82rem;color:#9aa0b4;font-weight:700">${total}</span>
+              </div>`}
+        </div>`;
+    }
+    html += `</div></div>`;
+  }
+  wrap.innerHTML = html;
+}
+
+// ─── TABS ─────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  btn.classList.add("active");
+  if (name === "stats") renderStats();
+}
+
+// ─── REALTIME ── nur Events von ANDEREN Sessions verarbeiten ─────────────────
+function setupRealtime() {
+  db.channel("outreach")
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "counter_events" }, payload => {
+      // Eigene Events bereits lokal verarbeitet — ignorieren
+      if (payload.new.session_id === SESSION_ID) return;
+      const { stage, delta } = payload.new;
+      if (!state[stage]) return;
+      state[stage].count = Math.max(0, state[stage].count + delta);
+      state[stage].lastClick = payload.new.created_at;
+      updateAllCounterUI();
+    })
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_uses" }, payload => {
+      // Eigene Events bereits lokal verarbeitet — ignorieren
+      if (payload.new.session_id === SESSION_ID) return;
+      const { kampagne, stage, variante } = payload.new;
+      const key = `${kampagne}_${stage}_${variante}`;
+      msgUses[key] = (msgUses[key] || 0) + 1;
+      const el = document.getElementById(`uses-${key}`);
+      if (el) el.textContent = msgUses[key] + "× verwendet";
+      if (document.getElementById("tab-stats").classList.contains("active")) renderStats();
+    })
+    .subscribe();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(async () => {
+  renderCards();
+  await loadCounterState();
+  await loadMsgUses();
+  await loadMessages();
+  renderStats();
+  setupRealtime();
+  document.getElementById("sync-status").textContent = "✅ Bereit";
+})();
 </script>
 </body>
 </html>
